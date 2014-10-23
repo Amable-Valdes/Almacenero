@@ -108,6 +108,7 @@ public class Main extends JFrame {
 	private JScrollPane panelScroll_Mensaje_Ampl_Frag;
 	private JTextArea txArea_Mensaje_Frag_Ampl;
 	private double pesoTotalPedSeleccionados = 0;
+	private JButton btnSeleccionarTodo;
 	
 	/**
 	 * Launch the application.
@@ -290,8 +291,10 @@ public class Main extends JFrame {
 	private JPanel getPanel_Botones_Productos() {
 		if (panel_Botones_Productos == null) {
 			panel_Botones_Productos = new JPanel();
+			panel_Botones_Productos.setLayout(new GridLayout(0, 3, 0, 0));
 			panel_Botones_Productos.add(getBt_Continuar_Productos());
 			panel_Botones_Productos.add(getBt_Atras_Productos());
+			panel_Botones_Productos.add(getBtnSeleccionarTodo());
 		}
 		return panel_Botones_Productos;
 	}
@@ -328,6 +331,7 @@ public class Main extends JFrame {
 			bt_Atras_Productos = new JButton("Atras");
 			bt_Atras_Productos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					
 					
 					((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Pedidos");
 					lb_Información.setText("Selecciona los pedidos que deseas recoger");
@@ -828,5 +832,21 @@ public class Main extends JFrame {
 			txArea_Mensaje_Frag_Ampl.setLineWrap(true);
 		}
 		return txArea_Mensaje_Frag_Ampl;
+	}
+	private JButton getBtnSeleccionarTodo() {
+		if (btnSeleccionarTodo == null) {
+			btnSeleccionarTodo = new JButton("Seleccionar todo");
+			btnSeleccionarTodo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					int[] a = new int[modeloListaProductos.getSize()];
+					for (int i = 0; i < modeloListaProductos.getSize(); i++) {
+						a[i]=i;
+					}
+					
+					list_Productos.setSelectedIndices(a);
+				}
+			});
+		}
+		return btnSeleccionarTodo;
 	}
 }
