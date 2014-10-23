@@ -2056,3 +2056,22 @@ Caused by: java.lang.NullPointerException
 	at org.eclipse.wb.core.eval.AstEvaluationEngine.evaluate0(AstEvaluationEngine.java:179)
 	at org.eclipse.wb.core.eval.AstEvaluationEngine.evaluate(AstEvaluationEngine.java:61)
 	... 182 more
+!SESSION 2014-10-23 13:11:14.080 -----------------------------------------------
+eclipse.buildId=4.4.0.I20140606-1215
+java.version=1.8.0_20
+java.vendor=Oracle Corporation
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=es_ES
+Framework arguments:  -product org.eclipse.epp.package.standard.product -product org.eclipse.epp.package.standard.product -keyring /Users/christianperezgonzalez/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.standard.product -data /Users/christianperezgonzalez/OneDrive/Informática 2014-2015/ips/Almacenero -product org.eclipse.epp.package.standard.product -keyring /Users/christianperezgonzalez/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2014-10-23 13:11:24.073
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.jdt.core 4 0 2014-10-23 13:11:27.754
+!MESSAGE Invalid ZIP archive: mysql-connector-java-5.1.22-bin.jar [in Almacen]
+
+!ENTRY org.eclipse.jdt.core 4 0 2014-10-23 13:11:56.759
+!MESSAGE Invalid ZIP archive: mysql-connector-java-5.1.22-bin.jar [in Almacen]
+
+!ENTRY org.eclipse.jdt.core 4 0 2014-10-23 13:11:56.762
+!MESSAGE Invalid ZIP archive: mysql-connector-java-5.1.22-bin.jar [in Almacen]
