@@ -9,13 +9,10 @@ import javax.swing.JLabel;
 
 import java.awt.CardLayout;
 
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
-import javax.swing.JRadioButton;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
@@ -34,7 +31,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.JTextArea;
-
+import javax.swing.JTable;
 
 public class Main extends JFrame {
 
@@ -42,21 +39,12 @@ public class Main extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected static final String MENSAJE_AYUDA_2 = "Diríjase al pasillo y estantería e el que se encuentra el "
-			+ "producto en cuestión y una vez recogido el producto seleccione 'Producto Recogido'";
-	protected static final String MENSAJE_AYUDA_1 = "Seleccione a continuación los productos que "
-			+ "desea recoger, a su izquierda encontrará el listado de los productos del o de los pedidos que "
-			+ "anteriormente ha seleccionado. Si desea seleccionar un pedido distinto pulse 'Atras'";
-	protected static final String MENSAJE_AYUDA_0 = "Buenos días almacenero, tiene usted los pedidos de nuestros"
-			+ " clientes en el lado izquierdo de esta aplicación. Seleccione el o los pedidos que desee "
-			+ "recoger hoy";
 	private JPanel contentPane;
 	private JPanel panel_Pestañas;
 	private JPanel panel_Informacion;
 	private JLabel lb_Información;
 	private JPanel panel_Seleccionar_Pedidos;
 	private JPanel panel_Seleccionar_Productos;
-	private JList<Pedido> list_Pedidos;
 	private JList<Producto> list_Productos;
 	private JScrollPane panel_Scroll_Pedidos;
 	private JScrollPane panel_Scroll_Productos;
@@ -109,6 +97,8 @@ public class Main extends JFrame {
 	private JTextArea txArea_Mensaje_Frag_Ampl;
 	private double pesoTotalPedSeleccionados = 0;
 	private JButton btnSeleccionarTodo;
+	private JTable tabla_Pedidos;
+	private ModeloNoEditable modeloTabla;
 	
 	/**
 	 * Launch the application.
@@ -186,20 +176,6 @@ public class Main extends JFrame {
 		}
 		return panel_Seleccionar_Productos;
 	}
-	private JList<Pedido> getList_Pedidos() {
-		if (list_Pedidos == null) {
-			list_Pedidos = new JList<Pedido>(modeloListaPedidos);
-			list_Pedidos.addListSelectionListener(new ListSelectionListener() {
-				public void valueChanged(ListSelectionEvent arg0) {
-					if(list_Pedidos.isSelectionEmpty())
-						bt_Continuar.setEnabled(false);
-					else
-						bt_Continuar.setEnabled(true);
-				}
-			});
-		}
-		return list_Pedidos;
-	}
 	private JList<Producto> getList_Productos() {
 		if (list_Productos == null) {
 			list_Productos = new JList<Producto>(modeloListaProductos);
@@ -217,7 +193,7 @@ public class Main extends JFrame {
 	private JScrollPane getPanel_Scroll_Pedidos() {
 		if (panel_Scroll_Pedidos == null) {
 			panel_Scroll_Pedidos = new JScrollPane();
-			panel_Scroll_Pedidos.setViewportView(getList_Pedidos());
+			panel_Scroll_Pedidos.setViewportView(getTabla_Pedidos());
 		}
 		return panel_Scroll_Pedidos;
 	}
@@ -408,6 +384,7 @@ public class Main extends JFrame {
 		ArrayList<Pedido> a = g.getPedidos();
 		for(Pedido p : a)
 			modeloListaPedidos.addElement(p);
+		añadirDatosTablaPedidos();
 	}
 	
 	private JPanel getPanel_Informacion_Productos() {
@@ -848,5 +825,38 @@ public class Main extends JFrame {
 			});
 		}
 		return btnSeleccionarTodo;
+	}
+
+	
+	
+	private JTable getTabla_Pedidos() {
+		if (tabla_Pedidos == null) {
+			String[] nombreColumnas = {"ID","Num Productos", "Fecha"};
+			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
+			tabla_Pedidos = new JTable(modeloTabla);
+			ajustarAnchoColumnas();
+			tabla_Pedidos.setRowHeight(20);
+			tabla_Pedidos.getTableHeader().setReorderingAllowed(false);
+		}
+		return tabla_Pedidos;
+	}
+
+	private void ajustarAnchoColumnas() {
+		int[] anchos = {50, 50, 50};
+		for(int i = 0; i < tabla_Pedidos.getColumnCount(); i++)
+			tabla_Pedidos.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+	}
+	
+	private void añadirDatosTablaPedidos()
+	{
+		modeloTabla.getDataVector().clear();
+		modeloTabla.fireTableDataChanged();
+		Object[] nuevaFila = new Object[3];
+		for(int i=0 ; i < modeloListaPedidos.getSize() ; i++){
+			nuevaFila[0] = modeloListaPedidos.get(i).getId();
+			nuevaFila[1] = modeloListaPedidos.get(i).getProductos().size();
+			nuevaFila[2] = modeloListaPedidos.get(i).getProductos().get(0).getFecha();
+			modeloTabla.addRow(nuevaFila);
+		}
 	}
 }
