@@ -1,5 +1,6 @@
 package logica;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ public class Gestor {
 		c3.crearConexion();
 		try {
 			PreparedStatement ps = c.getCon().prepareStatement(
-					"SELECT * FROM _pedidos");
+					"SELECT * FROM pedidos");
 			ResultSet rs = ps.executeQuery();
 			idPedidos = new ArrayList<Integer>();
 			productos = new ArrayList<Producto>();
@@ -36,15 +37,16 @@ public class Gestor {
 				int cantidad = Integer.parseInt(rs.getString("cantidad"));
 				int idProducto = Integer.parseInt(rs.getString("product_id"));
 				Context c = recogerCaracteristicas(idProducto);
-				String posicion = recogerPosicion(idProducto);
+				Date fecha = rs.getDate("fecha");
+				int estadoPedido =rs.getInt("estado_pedido");
 				for (int i = 0; i < cantidad; i++) {
 					// crear el objeto
 					Producto p = new Producto(id,
-							rs.getString("order_product_name"), posicion,
-							rs.getString("order_product_code"), c.ancho,
-							c.largo, c.alto, c.peso, Producto.POR_RECOGER);
+							cantidad,fecha,
+							Producto.POR_RECOGER);
 					p.setCantidadTotalEnPedido(cantidad);
 					productos.add(p);
+					System.out.println(p);
 				}
 			}
 		} catch (SQLException e) {
@@ -57,10 +59,14 @@ public class Gestor {
 
 	// clase auxiliar para evitar 3 llamadas a la bd
 	private class Context {
+		String nombre;
+		String codigo;
+		String posicion;
 		double peso;
 		double largo;
 		double ancho;
 		double alto;
+		
 	}
 
 	private Context recogerCaracteristicas(int idProducto) {
@@ -69,38 +75,23 @@ public class Gestor {
 			PreparedStatement ps = c2
 					.getCon()
 					.prepareStatement(
-							"SELECT * FROM `joomla_hikashop_product` WHERE `product_id`=?");
+							"SELECT * FROM `product` WHERE `product_id`=?");
 			ps.setInt(1, idProducto);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
+				c.nombre = rs.getString("product_name");
+				c.codigo = rs.getString("PRODUCT_CODE");
+				c.posicion = rs.getString("PRODUCT_POSICION");
 				c.peso = rs.getInt("product_weight");
 				c.alto = rs.getInt("product_length");
 				c.ancho = rs.getInt("product_width");
 				c.largo = rs.getInt("product_height");
+				
 			}
 		} catch (SQLException e) {
 			System.out.println("Error: " + e.getMessage());
 		}
 		return c;
-	}
-
-	private String recogerPosicion(int idProducto) {
-		String posicion = "";
-		try {
-			PreparedStatement ps = c3
-					.getCon()
-					.prepareStatement(
-							"Select * from joomla_hikashop_warehouse, joomla_hikashop_product WHERE joomla_hikashop_warehouse.warehouse_id = joomla_hikashop_product.product_warehouse_id and joomla_hikashop_product.product_id=?");
-
-			ps.setInt(1, idProducto);
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				posicion = rs.getString("warehouse_name");
-			}
-		} catch (SQLException e) {
-			System.out.println("Error: " + e.getMessage());
-		}
-		return posicion;
 	}
 
 	/**

@@ -22,27 +22,26 @@ public class Producto implements Comparable<Producto> {
 	private String location;
 	private int cantidadTotalEnPedido;
 
-	public Producto(int order_id, String order_product_name, String location,
-			String order_product_code, double ancho, double largo, double alto, double peso, int estadoProd) {
+
+	public Producto(int order_id, int cantidad, Date fecha,
+			int porRecoger) {
 		super();
 		this.order_id = order_id;
-		this.order_product_name = order_product_name;
-		this.order_product_code = order_product_code;
-		this.location = location;
-		this.ancho = ancho;
-		this.largo = largo;
-		this.alto = alto;
-		volumen = ancho * largo * alto;
-		this.peso = peso;
-		this.estado_producto = estadoProd;
+		this.cantidadTotalEnPedido = cantidad;
+		this.fecha = fecha;
+		
+		this.estado_producto = porRecoger;
 	}
 
 	/*
 	 * Constructor para pruebas
-	 */
-	public Producto(int peso) {
+	 
+	public Producto(int peso, int cantidad, Date fecha2, int porRecoger) {
 		this.peso = peso;
-	}
+		this.cantidadTotalEnPedido = cantidad;
+		this.fecha = fecha2;
+		this.estado_producto = porRecoger;
+	}*/
 
 	@Override
 	public int compareTo(Producto producto2) {

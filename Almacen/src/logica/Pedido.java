@@ -42,7 +42,7 @@ public class Pedido {
 
 	@Override
 	public String toString() {
-		return "Nº pedido: " + id + " - Nº productos: "
+		return "Nº pedido: " + id + " - Cantidad: "
 				+ productos.size() + " - Peso: " + peso();
 	}
 
