@@ -23,13 +23,14 @@ public class Producto implements Comparable<Producto> {
 	private int cantidadTotalEnPedido;
 
 
-	public Producto(int order_id, int cantidad, Date fecha,
+	public Producto(int order_id, String nombre, int cantidad, String posicion, Date fecha,
 			int porRecoger) {
 		super();
 		this.order_id = order_id;
 		this.cantidadTotalEnPedido = cantidad;
 		this.fecha = fecha;
-		
+		this.location = posicion;
+		this.order_product_name = nombre;
 		this.estado_producto = porRecoger;
 	}
 

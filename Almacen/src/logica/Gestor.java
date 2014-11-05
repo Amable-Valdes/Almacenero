@@ -39,10 +39,11 @@ public class Gestor {
 				Context c = recogerCaracteristicas(idProducto);
 				Date fecha = rs.getDate("fecha");
 				int estadoPedido =rs.getInt("estado_pedido");
+				
 				for (int i = 0; i < cantidad; i++) {
 					// crear el objeto
-					Producto p = new Producto(id,
-							cantidad,fecha,
+					Producto p = new Producto(id,c.nombre,
+							cantidad, c.posicion,fecha,
 							Producto.POR_RECOGER);
 					p.setCantidadTotalEnPedido(cantidad);
 					productos.add(p);
