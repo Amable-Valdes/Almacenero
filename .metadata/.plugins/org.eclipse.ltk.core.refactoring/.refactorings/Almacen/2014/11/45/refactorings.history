@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;modeloTabla2&apos; in &apos;igu.Main&apos; to &apos;modeloTablaProd&apos;&#x0A;- Original project: &apos;Almacen&apos;&#x0A;- Original element: &apos;igu.Main.modeloTabla2&apos;&#x0A;- Renamed element: &apos;igu.Main.modeloTablaProd&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;modeloTabla2&apos;" flags="589826" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;igu{Main.java[Main^modeloTabla2" name="modeloTablaProd" references="true" setter="false" stamp="1415215309266" textual="false" version="1.0"/>
+</session>

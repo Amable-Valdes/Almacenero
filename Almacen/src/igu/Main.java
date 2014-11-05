@@ -13,6 +13,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.TableRowSorter;
 
 import logica.*;
 
@@ -32,6 +34,8 @@ import java.awt.Font;
 
 import javax.swing.JTextArea;
 import javax.swing.JTable;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Main extends JFrame {
 
@@ -45,7 +49,6 @@ public class Main extends JFrame {
 	private JLabel lb_Información;
 	private JPanel panel_Seleccionar_Pedidos;
 	private JPanel panel_Seleccionar_Productos;
-	private JList<Producto> list_Productos;
 	private JScrollPane panel_Scroll_Pedidos;
 	private JScrollPane panel_Scroll_Productos;
 	private JButton bt_Continuar;
@@ -99,7 +102,11 @@ public class Main extends JFrame {
 	private JButton btnSeleccionarTodo;
 	private JTable tabla_Pedidos;
 	private ModeloNoEditable modeloTabla;
-	
+	protected JList<Producto> list_Pedidos;
+	private TableRowSorter<ModeloNoEditable> modeloOrdenado;
+	private JTable tabla_productos;
+	private ModeloNoEditable modeloTablaProd;
+	private TableRowSorter<ModeloNoEditable> modeloOrdenadoProd;
 	/**
 	 * Launch the application.
 	 */
@@ -176,20 +183,6 @@ public class Main extends JFrame {
 		}
 		return panel_Seleccionar_Productos;
 	}
-	private JList<Producto> getList_Productos() {
-		if (list_Productos == null) {
-			list_Productos = new JList<Producto>(modeloListaProductos);
-			list_Productos.addListSelectionListener(new ListSelectionListener() {
-				public void valueChanged(ListSelectionEvent arg0) {
-					if(list_Productos.isSelectionEmpty())
-						bt_Continuar_Productos.setEnabled(false);
-					else
-						bt_Continuar_Productos.setEnabled(true);
-				}
-			});
-		}
-		return list_Productos;
-	}
 	private JScrollPane getPanel_Scroll_Pedidos() {
 		if (panel_Scroll_Pedidos == null) {
 			panel_Scroll_Pedidos = new JScrollPane();
@@ -200,7 +193,7 @@ public class Main extends JFrame {
 	private JScrollPane getPanel_Scroll_Productos() {
 		if (panel_Scroll_Productos == null) {
 			panel_Scroll_Productos = new JScrollPane();
-			panel_Scroll_Productos.setViewportView(getList_Productos());
+			panel_Scroll_Productos.setViewportView(getTabla_productos());
 		}
 		return panel_Scroll_Productos;
 	}
@@ -210,7 +203,12 @@ public class Main extends JFrame {
 			bt_Continuar.setEnabled(false);
 			bt_Continuar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					modeloListaProductos.clear();
+					
+					((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Productos");
+					
+					lb_Información.setText("Selecciona los productos que deseas recoger");
+					
+					/*modeloListaProductos.clear();
 					int[] seleccionados = list_Pedidos.getSelectedIndices();
 					
 					ArrayList<Producto> listaProductos = null;
@@ -251,7 +249,7 @@ public class Main extends JFrame {
 						txArea_Mensaje_Frag_Ampl.setText("El/Los pedidos seleccionados son muy pequeños "
 								+ "¿Deseas que el sistema te seleccione otros productos de otros pedidos para ahorrar tiempo?");
 					}
-					pesoTotalPedSeleccionados = pesoTotal;
+					pesoTotalPedSeleccionados = pesoTotal;*/
 				}
 			});
 		}
@@ -831,9 +829,25 @@ public class Main extends JFrame {
 	
 	private JTable getTabla_Pedidos() {
 		if (tabla_Pedidos == null) {
-			String[] nombreColumnas = {"ID","Num Productos", "Fecha"};
+			String[] nombreColumnas = {"ID","Bultos", "Fecha"};
 			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
+			modeloOrdenado = new TableRowSorter<ModeloNoEditable>(modeloTabla);
+			
 			tabla_Pedidos = new JTable(modeloTabla);
+			
+			tabla_Pedidos.setRowSorter(modeloOrdenado);
+			tabla_Pedidos.getRowSorter().toggleSortOrder(2);
+			tabla_Pedidos.getRowSorter().toggleSortOrder(2);
+			
+			tabla_Pedidos.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					
+						bt_Continuar.setEnabled(true);
+						btAtras.setEnabled(false);
+						cargarDatosProductos(tabla_Pedidos.getSelectedRow());
+				}
+			});
 			ajustarAnchoColumnas();
 			tabla_Pedidos.setRowHeight(20);
 			tabla_Pedidos.getTableHeader().setReorderingAllowed(false);
@@ -858,5 +872,52 @@ public class Main extends JFrame {
 			nuevaFila[2] = modeloListaPedidos.get(i).getProductos().get(0).getFecha();
 			modeloTabla.addRow(nuevaFila);
 		}
+	}
+	
+	private void añadirDatosTablaProductos()
+	{
+		modeloTablaProd.getDataVector().clear();
+		modeloTablaProd.fireTableDataChanged();
+		Object[] nuevaFila = new Object[3];
+		for(int i=0 ; i < modeloListaProductos.getSize() ; i++){
+			nuevaFila[0] = modeloListaProductos.get(i).getOrder_product_name();
+			nuevaFila[1] = modeloListaProductos.get(i).getCantidadTotalEnPedido();
+			nuevaFila[2] = modeloListaProductos.get(i).getLocation();
+			modeloTablaProd.addRow(nuevaFila);
+		}
+	}
+	private void ajustarAnchoColumnasProd() {
+		int[] anchos = {50, 50, 50};
+		for(int i = 0; i < tabla_productos.getColumnCount(); i++)
+			tabla_productos.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+	}
+	
+	public void cargarDatosProductos(int pedido)
+	{
+		
+		ArrayList<Producto> a = modeloListaPedidos.get(pedido).getProductos();
+		for(Producto p : a)
+			modeloListaProductos.addElement(p);
+		añadirDatosTablaProductos();
+	}
+	
+	private JTable getTabla_productos() {
+		if (tabla_productos == null) {
+			
+			String[] nombreColumnas = {"nombre","cantidad", "ubicacion"};
+			modeloTablaProd = new ModeloNoEditable(nombreColumnas, 0);
+			modeloOrdenadoProd = new TableRowSorter<ModeloNoEditable>(modeloTablaProd);
+			tabla_productos = new JTable();
+			
+			tabla_productos.setRowSorter(modeloOrdenadoProd);
+			tabla_productos.getRowSorter().toggleSortOrder(0);
+			//tabla_productos.getRowSorter().toggleSortOrder(2);
+			
+			
+			ajustarAnchoColumnasProd();
+			tabla_productos.setRowHeight(20);
+			tabla_productos.getTableHeader().setReorderingAllowed(false);
+		}
+		return tabla_productos;
 	}
 }
