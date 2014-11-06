@@ -57,8 +57,6 @@ public class Main extends JFrame {
 	private JButton bt_Continuar_Productos;
 	private JButton bt_Atras_Productos;
 
-	private DefaultListModel<Producto> modeloListaProductos = new DefaultListModel<Producto>();
-	private DefaultListModel<Pedido> modeloListaPedidos = new DefaultListModel<Pedido>();
 	private JPanel panel_Informacion_Productos;
 	private JPanel panel_Datos;
 	private JPanel panel_Avanzar;
@@ -101,12 +99,16 @@ public class Main extends JFrame {
 	private double pesoTotalPedSeleccionados = 0;
 	private JButton btnSeleccionarTodo;
 	private JTable tabla_Pedidos;
-	private ModeloNoEditable modeloTabla;
 	protected JList<Producto> list_Pedidos;
-	private TableRowSorter<ModeloNoEditable> modeloOrdenado;
 	private JTable tabla_productos;
+	
+	private ModeloNoEditable modeloTablaPed;
+	private TableRowSorter<ModeloNoEditable> modeloOrdenado;
 	private ModeloNoEditable modeloTablaProd;
 	private TableRowSorter<ModeloNoEditable> modeloOrdenadoProd;
+	private DefaultListModel<Producto> modeloListaProductos = new DefaultListModel<Producto>();
+	private DefaultListModel<Pedido> modeloListaPedidos = new DefaultListModel<Pedido>();
+
 	/**
 	 * Launch the application.
 	 */
@@ -203,6 +205,8 @@ public class Main extends JFrame {
 			bt_Continuar.setEnabled(false);
 			bt_Continuar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					borrarDatosProductos();
+					cargarDatosProductos(tabla_Pedidos.getSelectedRow());
 					
 					((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Productos");
 					
@@ -305,12 +309,15 @@ public class Main extends JFrame {
 			bt_Atras_Productos = new JButton("Atras");
 			bt_Atras_Productos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					
-					
+					tabla_productos = null;
+					for (int i = 0; i < modeloTablaProd.getRowCount(); i++) {
+						modeloTablaProd.removeRow(i);
+					}
+					tabla_productos=getTabla_productos();
 					((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Pedidos");
 					lb_Información.setText("Selecciona los pedidos que deseas recoger");
 					
-					
+					borrarDatosProductos();
 				}
 			});
 		}
@@ -830,10 +837,10 @@ public class Main extends JFrame {
 	private JTable getTabla_Pedidos() {
 		if (tabla_Pedidos == null) {
 			String[] nombreColumnas = {"ID","Bultos", "Fecha"};
-			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
-			modeloOrdenado = new TableRowSorter<ModeloNoEditable>(modeloTabla);
+			modeloTablaPed = new ModeloNoEditable(nombreColumnas, 0);
+			modeloOrdenado = new TableRowSorter<ModeloNoEditable>(modeloTablaPed);
 			
-			tabla_Pedidos = new JTable(modeloTabla);
+			tabla_Pedidos = new JTable(modeloTablaPed);
 			
 			tabla_Pedidos.setRowSorter(modeloOrdenado);
 			tabla_Pedidos.getRowSorter().toggleSortOrder(2);
@@ -845,7 +852,6 @@ public class Main extends JFrame {
 					
 						bt_Continuar.setEnabled(true);
 						btAtras.setEnabled(false);
-						cargarDatosProductos(tabla_Pedidos.getSelectedRow());
 				}
 			});
 			ajustarAnchoColumnas();
@@ -863,14 +869,14 @@ public class Main extends JFrame {
 	
 	private void añadirDatosTablaPedidos()
 	{
-		modeloTabla.getDataVector().clear();
-		modeloTabla.fireTableDataChanged();
+		modeloTablaPed.getDataVector().clear();
+		modeloTablaPed.fireTableDataChanged();
 		Object[] nuevaFila = new Object[3];
 		for(int i=0 ; i < modeloListaPedidos.getSize() ; i++){
 			nuevaFila[0] = modeloListaPedidos.get(i).getId();
 			nuevaFila[1] = modeloListaPedidos.get(i).getProductos().size();
 			nuevaFila[2] = modeloListaPedidos.get(i).getProductos().get(0).getFecha();
-			modeloTabla.addRow(nuevaFila);
+			modeloTablaPed.addRow(nuevaFila);
 		}
 	}
 	
@@ -895,10 +901,21 @@ public class Main extends JFrame {
 	public void cargarDatosProductos(int pedido)
 	{
 		
+		
 		ArrayList<Producto> a = modeloListaPedidos.get(pedido).getProductos();
 		for(Producto p : a)
 			modeloListaProductos.addElement(p);
 		añadirDatosTablaProductos();
+	}
+	
+	public void borrarDatosProductos()
+	{
+		tabla_productos.removeAll();
+		modeloTablaProd.getDataVector().clear();
+		modeloTablaProd.fireTableDataChanged();
+		modeloOrdenadoProd.getModel().getDataVector().clear();
+		modeloOrdenadoProd.getModel().fireTableDataChanged();
+		
 	}
 	
 	private JTable getTabla_productos() {
@@ -909,8 +926,8 @@ public class Main extends JFrame {
 			modeloOrdenadoProd = new TableRowSorter<ModeloNoEditable>(modeloTablaProd);
 			tabla_productos = new JTable(modeloTablaProd);
 			
-			tabla_productos.setRowSorter(modeloOrdenadoProd);
-			tabla_productos.getRowSorter().toggleSortOrder(0);
+			//tabla_productos.setRowSorter(modeloOrdenadoProd);
+			//tabla_productos.getRowSorter().toggleSortOrder(0);
 			//tabla_productos.getRowSorter().toggleSortOrder(2);
 			
 			
