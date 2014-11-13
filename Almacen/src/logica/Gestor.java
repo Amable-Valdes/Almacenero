@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import logica.basesDatos.Conexion;
@@ -37,7 +38,12 @@ public class Gestor {
 				int cantidad = Integer.parseInt(rs.getString("cantidad"));
 				int idProducto = Integer.parseInt(rs.getString("product_id"));
 				Context c = recogerCaracteristicas(idProducto);
-				Date fecha = rs.getDate("fecha");
+				
+				String patron = "dd/MM/yyyy";
+			    SimpleDateFormat formato = new SimpleDateFormat(patron);
+			    // formateo
+			    String fecha =formato.format(rs.getDate("fecha"));
+				
 				int estadoPedido =rs.getInt("estado_pedido");
 				
 				for (int i = 0; i < cantidad; i++) {

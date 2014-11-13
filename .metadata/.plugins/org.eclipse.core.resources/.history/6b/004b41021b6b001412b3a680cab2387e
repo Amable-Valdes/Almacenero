@@ -1,4 +1,5 @@
 package logica;
+import java.sql.Date;
 
 public class Producto implements Comparable<Producto> {
 	public static final int RECOGIDO = 0;

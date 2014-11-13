@@ -108,8 +108,6 @@ public class Main extends JFrame {
 	private TableRowSorter<ModeloNoEditable> modeloOrdenadoProd;
 	private DefaultListModel<Producto> modeloListaProductos = new DefaultListModel<Producto>();
 	private DefaultListModel<Pedido> modeloListaPedidos = new DefaultListModel<Pedido>();
-	private JPanel panel_CentralTabla;
-	private JButton bt_Incidencias;
 
 	/**
 	 * Launch the application.
@@ -173,8 +171,8 @@ public class Main extends JFrame {
 		if (panel_Seleccionar_Pedidos == null) {
 			panel_Seleccionar_Pedidos = new JPanel();
 			panel_Seleccionar_Pedidos.setLayout(new BorderLayout(0, 0));
+			panel_Seleccionar_Pedidos.add(getPanel_Scroll_Pedidos(), BorderLayout.CENTER);
 			panel_Seleccionar_Pedidos.add(getPanel_Botones_Pedidos(), BorderLayout.SOUTH);
-			panel_Seleccionar_Pedidos.add(getPanel_CentralTabla(), BorderLayout.CENTER);
 		}
 		return panel_Seleccionar_Pedidos;
 	}
@@ -938,20 +936,5 @@ public class Main extends JFrame {
 			tabla_productos.getTableHeader().setReorderingAllowed(false);
 		}
 		return tabla_productos;
-	}
-	private JPanel getPanel_CentralTabla() {
-		if (panel_CentralTabla == null) {
-			panel_CentralTabla = new JPanel();
-			panel_CentralTabla.setLayout(new BorderLayout(0, 0));
-			panel_CentralTabla.add(getPanel_Scroll_Pedidos(), BorderLayout.CENTER);
-			panel_CentralTabla.add(getBt_Incidencias(), BorderLayout.SOUTH);
-		}
-		return panel_CentralTabla;
-	}
-	private JButton getBt_Incidencias() {
-		if (bt_Incidencias == null) {
-			bt_Incidencias = new JButton("Avisar de incidencia");
-		}
-		return bt_Incidencias;
 	}
 }
