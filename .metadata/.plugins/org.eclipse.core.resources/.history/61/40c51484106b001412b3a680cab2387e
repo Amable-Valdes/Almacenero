@@ -836,7 +836,7 @@ public class Main extends JFrame {
 	
 	private JTable getTabla_Pedidos() {
 		if (tabla_Pedidos == null) {
-			String[] nombreColumnas = {"Orden","Bultos", "Fecha"};
+			String[] nombreColumnas = {"ID","Bultos", "Fecha"};
 			modeloTablaPed = new ModeloNoEditable(nombreColumnas, 0);
 			modeloOrdenado = new TableRowSorter<ModeloNoEditable>(modeloTablaPed);
 			
