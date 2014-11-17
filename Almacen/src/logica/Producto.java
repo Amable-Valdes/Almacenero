@@ -42,6 +42,13 @@ public class Producto implements Comparable<Producto> {
 		this.fecha = fecha2;
 		this.estado_producto = porRecoger;
 	}*/
+	
+	//Constructor para pruebas
+	 
+	public Producto(String nombre,String code) {
+		this.order_product_name = nombre;
+		this.order_product_code = code;
+	}
 
 	@Override
 	public int compareTo(Producto producto2) {

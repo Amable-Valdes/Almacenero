@@ -18,6 +18,12 @@ public class Gestor {
 	private ArrayList<Integer> idPedidos;
 	private ArrayList<Pedido> pedidos;
 
+	private void productoRecogido()
+	{
+		c.crearConexion();
+		//Completar en casa
+	}
+	
 	/**
 	 * Método que lee de la base de datos
 	 */

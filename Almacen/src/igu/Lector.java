@@ -4,14 +4,27 @@ import java.awt.EventQueue;
 
 import javax.swing.JDialog;
 import javax.swing.JButton;
+
 import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
 import java.awt.FlowLayout;
 
+import javax.swing.SwingConstants;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import logica.Bulto;
+import logica.Producto;
+
 public class Lector extends JDialog {
+	private static final long serialVersionUID = 1L;
+	
 	private JPanel panel_BotonesDefecto;
 	private JPanel panel_Centro;
 	private JButton bt_Cancelar;
@@ -23,6 +36,13 @@ public class Lector extends JDialog {
 	private JPanel panel_InfProd;
 	private JLabel lb_InformacionProducto;
 	private JTextArea txA_InfProd;
+	private JPanel panel_Opciones;
+	private JPanel panel_Cantidad;
+	private JButton bt_Reducir;
+	private JButton bt_Añadir;
+	private JTextField txF_Cantidad;
+	
+	private Bulto productos;
 
 	/**
 	 * Launch the application.
@@ -31,7 +51,7 @@ public class Lector extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Lector dialog = new Lector();
+					Lector dialog = new Lector(new Bulto(new Producto("a","bbb"),5));
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e) {
@@ -44,10 +64,14 @@ public class Lector extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Lector() {
-		setBounds(100, 100, 300, 296);
+	public Lector(Bulto bultoARecoger) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 300, 250);
 		getContentPane().add(getPanel_Centro(), BorderLayout.CENTER);
 		getContentPane().add(getPanel_BotonesDefecto(), BorderLayout.SOUTH);
+		productos = bultoARecoger;
+		lb_InformacionProducto.setText("Producto: "+productos.getProducto().getOrder_product_name()
+				+"- "+productos.getCantidad()+" unidades");
 
 	}
 	private JPanel getPanel_BotonesDefecto() {
@@ -72,12 +96,33 @@ public class Lector extends JDialog {
 	private JButton getBt_Cancelar() {
 		if (bt_Cancelar == null) {
 			bt_Cancelar = new JButton("Cancelar");
+			bt_Cancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					salir();
+				}
+			});
 		}
 		return bt_Cancelar;
 	}
+	
+	private void salir()
+	{
+		this.dispose();
+	}
+	
 	private JButton getBt_Continuar() {
 		if (bt_Continuar == null) {
 			bt_Continuar = new JButton("Continuar");
+			bt_Continuar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(txF_CodBarras.getText().equals(productos.getProducto().getOrder_product_code()))
+					{
+						txA_InfProd.setText("Producto recogido");
+					}else{
+						txA_InfProd.setText("Error al recoger, código erroneo");
+					}
+				}
+			});
 		}
 		return bt_Continuar;
 	}
@@ -119,7 +164,7 @@ public class Lector extends JDialog {
 		if (panel_InfProd == null) {
 			panel_InfProd = new JPanel();
 			panel_InfProd.setLayout(new BorderLayout(10, 10));
-			panel_InfProd.add(getPanel_CodigoBarras());
+			panel_InfProd.add(getPanel_Opciones(), BorderLayout.CENTER);
 			panel_InfProd.add(getLb_InformacionProducto(), BorderLayout.NORTH);
 			panel_InfProd.add(getTxA_InfProd(), BorderLayout.SOUTH);
 		}
@@ -134,10 +179,61 @@ public class Lector extends JDialog {
 	private JTextArea getTxA_InfProd() {
 		if (txA_InfProd == null) {
 			txA_InfProd = new JTextArea();
-			txA_InfProd.setText("Si CodBarras == true {Producto recogido} else {error al recoger, boton continuar a no-enabled o se cambia el texto a \"salir\"}");
 			txA_InfProd.setWrapStyleWord(true);
 			txA_InfProd.setLineWrap(true);
 		}
 		return txA_InfProd;
+	}
+	private JPanel getPanel_Opciones() {
+		if (panel_Opciones == null) {
+			panel_Opciones = new JPanel();
+			panel_Opciones.setLayout(new BorderLayout(0, 0));
+			panel_Opciones.add(getPanel_CodigoBarras(), BorderLayout.CENTER);
+			panel_Opciones.add(getPanel_Cantidad(), BorderLayout.SOUTH);
+		}
+		return panel_Opciones;
+	}
+	private JPanel getPanel_Cantidad() {
+		if (panel_Cantidad == null) {
+			panel_Cantidad = new JPanel();
+			panel_Cantidad.add(getBt_Reducir());
+			panel_Cantidad.add(getTxF_Cantidad());
+			panel_Cantidad.add(getBt_Añadir());
+		}
+		return panel_Cantidad;
+	}
+	private JButton getBt_Reducir() {
+		if (bt_Reducir == null) {
+			bt_Reducir = new JButton("-");
+			bt_Reducir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(Integer.valueOf(txF_Cantidad.getText())>1)
+						txF_Cantidad.setText((Integer.valueOf(txF_Cantidad.getText())-1)+"");
+				}
+			});
+		}
+		return bt_Reducir;
+	}
+	private JButton getBt_Añadir() {
+		if (bt_Añadir == null) {
+			bt_Añadir = new JButton("+");
+			bt_Añadir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(Integer.valueOf(txF_Cantidad.getText())<productos.getCantidad())
+					txF_Cantidad.setText((Integer.valueOf(txF_Cantidad.getText())+1)+"");
+				}
+			});
+		}
+		return bt_Añadir;
+	}
+	private JTextField getTxF_Cantidad() {
+		if (txF_Cantidad == null) {
+			txF_Cantidad = new JTextField();
+			txF_Cantidad.setText("1");
+			txF_Cantidad.setHorizontalAlignment(SwingConstants.CENTER);
+			txF_Cantidad.setEditable(false);
+			txF_Cantidad.setColumns(10);
+		}
+		return txF_Cantidad;
 	}
 }
