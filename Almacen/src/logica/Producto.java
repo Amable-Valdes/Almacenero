@@ -49,6 +49,7 @@ public class Producto implements Comparable<Producto> {
 		this.order_id = id;
 		this.order_product_name = nombre;
 		this.order_product_code = code;
+		this.estado_producto = Producto.POR_RECOGER;
 	}
 
 	@Override
@@ -191,6 +192,24 @@ public class Producto implements Comparable<Producto> {
 
 	public void setCantidadTotalEnPedido(int cantidadTotalEnPedido) {
 		this.cantidadTotalEnPedido = cantidadTotalEnPedido;
+	}
+	
+	public void recoger()
+	{
+		/*
+		Gestor g = new Gestor();
+		g.productoRecogido(this.order_id);
+		*/
+		this.estado_producto = Producto.RECOGIDO;
+	}
+	
+	public void empaquetar()
+	{
+		/*
+		Gestor g = new Gestor();
+		g.productoEmpaquetado(this.order_id);
+		*/
+		this.estado_producto = Producto.EMPAQUETADO;
 	}
 }
 
