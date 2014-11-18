@@ -7,6 +7,7 @@ import javax.swing.JButton;
 
 import java.awt.BorderLayout;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
@@ -292,7 +293,7 @@ public class Lector extends JDialog {
 					int i = 0;
 					for (i = 0; i < Integer.valueOf(txF_Cantidad.getText()); i++)
 						productos.getProductos().get(i).recoger();
-					txA_InfProd.setText(i + " productos recogidos");
+					JOptionPane.showMessageDialog(null,i + " productos recogidos");
 					cargarInformacionBultos();
 					crearNuevoLector();
 				}
@@ -309,7 +310,7 @@ public class Lector extends JDialog {
 					int i = 0;
 					for (i = 0; i < Integer.valueOf(txF_Cantidad.getText()); i++)
 						productos.getProductos().get(i).empaquetar();
-					txA_InfProd.setText(i + " productos empaquetados");
+					JOptionPane.showMessageDialog(null,i + " productos empaquetados");
 					cargarInformacionBultos();
 					crearNuevoLector();
 				}
@@ -363,5 +364,6 @@ public class Lector extends JDialog {
 				this.setVisible(false);
 			}
 		}
+		this.salir();
 	}
 }
