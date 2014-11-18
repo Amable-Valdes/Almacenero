@@ -1,18 +1,20 @@
 package logica;
 
+import java.util.List;
+
 public class Bulto {
 
-	private Producto producto;
+	private List<Producto> productos;
 	private int cantidad;
 	
-	public Bulto(Producto producto, int cantidad) {
+	public Bulto(List<Producto> producto) {
 		super();
-		this.producto = producto;
-		this.cantidad = cantidad;
+		this.productos = producto;
+		this.cantidad = productos.size();
 	}
 
-	public Producto getProducto() {
-		return producto;
+	public List<Producto> getProductos() {
+		return productos;
 	}
 
 	public int getCantidad() {

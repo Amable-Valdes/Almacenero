@@ -18,8 +18,10 @@ import javax.swing.SwingConstants;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import logica.Bulto;
+import logica.Gestor;
 import logica.Producto;
 
 public class Lector extends JDialog {
@@ -27,8 +29,7 @@ public class Lector extends JDialog {
 	
 	private JPanel panel_BotonesDefecto;
 	private JPanel panel_Centro;
-	private JButton bt_Cancelar;
-	private JButton bt_Continuar;
+	private JButton bt_Salir;
 	private JTextArea txA_Informacion;
 	private JTextField txF_CodBarras;
 	private JPanel panel_CodigoBarras;
@@ -41,6 +42,10 @@ public class Lector extends JDialog {
 	private JButton bt_Reducir;
 	private JButton bt_Añadir;
 	private JTextField txF_Cantidad;
+	private JPanel panel_Empaquetar_O_Recoger;
+	private JPanel panel_Salir;
+	private JButton bt_Recoger;
+	private JButton bt_Empaquetar;
 	
 	private Bulto productos;
 
@@ -51,7 +56,12 @@ public class Lector extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Lector dialog = new Lector(new Bulto(new Producto("a","bbb"),5));
+					ArrayList<Producto> prodPrueba = new ArrayList<Producto>();
+					prodPrueba.add(new Producto(1,"a","bbb"));
+					prodPrueba.add(new Producto(2,"a","bbb"));
+					prodPrueba.add(new Producto(3,"a","bbb"));
+					prodPrueba.add(new Producto(4,"a","bbb"));
+					Lector dialog = new Lector(new Bulto(prodPrueba));
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e) {
@@ -66,21 +76,39 @@ public class Lector extends JDialog {
 	 */
 	public Lector(Bulto bultoARecoger) {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 300, 250);
+		setBounds(100, 100, 300, 300);
 		getContentPane().add(getPanel_Centro(), BorderLayout.CENTER);
 		getContentPane().add(getPanel_BotonesDefecto(), BorderLayout.SOUTH);
 		productos = bultoARecoger;
-		lb_InformacionProducto.setText("Producto: "+productos.getProducto().getOrder_product_name()
+		lb_InformacionProducto.setText("Producto: "+productos.getProductos().get(0).getOrder_product_name()
 				+"- "+productos.getCantidad()+" unidades");
-
+		cargarInformacionBultos();
 	}
+	
+	private void cargarInformacionBultos() {
+		if(productos.getProductos().get(0).getEstado_producto() == Producto.POR_RECOGER)
+		{
+			bt_Recoger.setEnabled(true);
+			bt_Empaquetar.setEnabled(false);
+		}
+		if(productos.getProductos().get(0).getEstado_producto() == Producto.RECOGIDO)
+		{
+			bt_Recoger.setEnabled(false);
+			bt_Empaquetar.setEnabled(true);
+		}
+		if(productos.getProductos().get(0).getEstado_producto() == Producto.EMPAQUETADO)
+		{
+			bt_Recoger.setEnabled(false);
+			bt_Empaquetar.setEnabled(false);
+		}
+	}
+
 	private JPanel getPanel_BotonesDefecto() {
 		if (panel_BotonesDefecto == null) {
 			panel_BotonesDefecto = new JPanel();
-			FlowLayout flowLayout = (FlowLayout) panel_BotonesDefecto.getLayout();
-			flowLayout.setHgap(10);
-			panel_BotonesDefecto.add(getBt_Continuar());
-			panel_BotonesDefecto.add(getBt_Cancelar());
+			panel_BotonesDefecto.setLayout(new BorderLayout(0, 0));
+			panel_BotonesDefecto.add(getPanel_Empaquetar_O_Recoger());
+			panel_BotonesDefecto.add(getPanel_Salir(), BorderLayout.SOUTH);
 		}
 		return panel_BotonesDefecto;
 	}
@@ -93,38 +121,21 @@ public class Lector extends JDialog {
 		}
 		return panel_Centro;
 	}
-	private JButton getBt_Cancelar() {
-		if (bt_Cancelar == null) {
-			bt_Cancelar = new JButton("Cancelar");
-			bt_Cancelar.addActionListener(new ActionListener() {
+	private JButton getBt_Salir() {
+		if (bt_Salir == null) {
+			bt_Salir = new JButton("Salir");
+			bt_Salir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					salir();
 				}
 			});
 		}
-		return bt_Cancelar;
+		return bt_Salir;
 	}
 	
 	private void salir()
 	{
 		this.dispose();
-	}
-	
-	private JButton getBt_Continuar() {
-		if (bt_Continuar == null) {
-			bt_Continuar = new JButton("Continuar");
-			bt_Continuar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					if(txF_CodBarras.getText().equals(productos.getProducto().getOrder_product_code()))
-					{
-						txA_InfProd.setText("Producto recogido");
-					}else{
-						txA_InfProd.setText("Error al recoger, código erroneo");
-					}
-				}
-			});
-		}
-		return bt_Continuar;
 	}
 	private JTextArea getTxA_Informacion() {
 		if (txA_Informacion == null) {
@@ -235,5 +246,54 @@ public class Lector extends JDialog {
 			txF_Cantidad.setColumns(10);
 		}
 		return txF_Cantidad;
+	}
+	private JPanel getPanel_Empaquetar_O_Recoger() {
+		if (panel_Empaquetar_O_Recoger == null) {
+			panel_Empaquetar_O_Recoger = new JPanel();
+			@SuppressWarnings("unused")
+			FlowLayout flowLayout = (FlowLayout) panel_Empaquetar_O_Recoger.getLayout();
+			panel_Empaquetar_O_Recoger.add(getBt_Recoger());
+			panel_Empaquetar_O_Recoger.add(getBt_Empaquetar());
+		}
+		return panel_Empaquetar_O_Recoger;
+	}
+	private JPanel getPanel_Salir() {
+		if (panel_Salir == null) {
+			panel_Salir = new JPanel();
+			FlowLayout flowLayout = (FlowLayout) panel_Salir.getLayout();
+			flowLayout.setAlignment(FlowLayout.RIGHT);
+			panel_Salir.add(getBt_Salir());
+		}
+		return panel_Salir;
+	}
+	private JButton getBt_Recoger() {
+		if (bt_Recoger == null) {
+			bt_Recoger = new JButton("Recoger");
+			bt_Recoger.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					Gestor g = new Gestor();
+					int i = 0;
+					for(i = 0; i< Integer.valueOf(txF_Cantidad.getText());i++)
+						g.productoRecogido(productos.getProductos().get(i).getOrder_id());
+					txA_InfProd.setText(i+" productos recogidos");
+				}
+			});
+		}
+		return bt_Recoger;
+	}
+	private JButton getBt_Empaquetar() {
+		if (bt_Empaquetar == null) {
+			bt_Empaquetar = new JButton("Empaquetar");
+			bt_Empaquetar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					Gestor g = new Gestor();
+					int i = 0;
+					for(i = 0; i< Integer.valueOf(txF_Cantidad.getText());i++)
+						g.productoRecogido(productos.getProductos().get(i).getOrder_id());
+					txA_InfProd.setText(i+" productos empaquetados");
+				}
+			});
+		}
+		return bt_Empaquetar;
 	}
 }

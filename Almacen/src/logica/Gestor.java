@@ -1,6 +1,5 @@
 package logica;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,28 +10,48 @@ import logica.basesDatos.Conexion;
 
 public class Gestor {
 
-	private Conexion c = new Conexion();
+	private Conexion c1 = new Conexion();
 	private Conexion c2 = new Conexion(); // conexion anidada
 	private Conexion c3 = new Conexion(); // conexion anidada
 	private ArrayList<Producto> productos;
 	private ArrayList<Integer> idPedidos;
 	private ArrayList<Pedido> pedidos;
 
-	private void productoRecogido()
+	public void productoRecogido(int idProducto)
 	{
-		c.crearConexion();
-		//Completar en casa
+		c1.crearConexion();
+		String query = "update `product` set ??????????????????????? = ? WHERE `product_id`=?";
+	    PreparedStatement preparedStmt;
+		try {
+			preparedStmt = c1.getCon().prepareStatement(query);
+			preparedStmt.setString(idProducto, "RECOGIDO");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}  
+	}
+	
+	public void productoEmpaquetado(int idProducto)
+	{
+		c1.crearConexion();
+		String query = "update `product` set ??????????????????????? = ? WHERE `product_id`=?";
+	    PreparedStatement preparedStmt;
+		try {
+			preparedStmt = c1.getCon().prepareStatement(query);
+			preparedStmt.setString(idProducto, "EMPAQUETAR");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}  
 	}
 	
 	/**
 	 * Método que lee de la base de datos
 	 */
 	private void cargarOrdenes() {
-		c.crearConexion();
+		c1.crearConexion();
 		c2.crearConexion();
 		c3.crearConexion();
 		try {
-			PreparedStatement ps = c.getCon().prepareStatement(
+			PreparedStatement ps = c1.getCon().prepareStatement(
 					"SELECT * FROM pedidos");
 			ResultSet rs = ps.executeQuery();
 			idPedidos = new ArrayList<Integer>();
@@ -59,7 +78,7 @@ public class Gestor {
 							Producto.POR_RECOGER);
 					p.setCantidadTotalEnPedido(cantidad);
 					productos.add(p);
-					System.out.println(p);
+					//System.out.println(p);
 				}
 			}
 		} catch (SQLException e) {
@@ -67,7 +86,7 @@ public class Gestor {
 		}
 		c3.cerraConexion();
 		c2.cerraConexion();
-		c.cerraConexion();
+		c1.cerraConexion();
 	}
 
 	// clase auxiliar para evitar 3 llamadas a la bd
@@ -109,7 +128,7 @@ public class Gestor {
 
 	/**
 	 * Genera los pedidos a partir de todas los productos este es uno de los
-	 * prosibles métodos de los que podrá leer la GUI
+	 * posibles métodos de los que podrá leer la GUI
 	 */
 	public void generaPedidos() {
 		cargarOrdenes();

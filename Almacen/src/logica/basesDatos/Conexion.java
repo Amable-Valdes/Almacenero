@@ -23,12 +23,12 @@ public class Conexion {
         } catch (Exception e) {
              System.out.println(e);
         }
-        System.out.println("CONEXION CREADA");
+        //System.out.println("CONEXION CREADA");
 	}
 
 	public void cerraConexion() {
 		setCon(null);	
-        System.out.println("CONEXION CERRADA");
+        //System.out.println("CONEXION CERRADA");
 	}
 
 	public Connection getCon() {

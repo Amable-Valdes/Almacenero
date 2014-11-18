@@ -3,6 +3,7 @@ package logica;
 public class Producto implements Comparable<Producto> {
 	public static final int RECOGIDO = 0;
 	public static final int POR_RECOGER = 1;
+	public static final int EMPAQUETADO = 2;
 	public static final int PESO_GRANDE = 30;
 	public static final int PESO_PEQUEÑO = 20;
 	
@@ -44,8 +45,8 @@ public class Producto implements Comparable<Producto> {
 	}*/
 	
 	//Constructor para pruebas
-	 
-	public Producto(String nombre,String code) {
+	public Producto(int id, String nombre,String code) {
+		this.order_id = id;
 		this.order_product_name = nombre;
 		this.order_product_code = code;
 	}
