@@ -10628,3 +10628,25 @@ Caused by: java.lang.NullPointerException
 	at org.eclipse.wb.core.eval.AstEvaluationEngine.evaluate0(AstEvaluationEngine.java:179)
 	at org.eclipse.wb.core.eval.AstEvaluationEngine.evaluate(AstEvaluationEngine.java:61)
 	... 161 more
+!SESSION 2014-11-19 21:47:55.123 -----------------------------------------------
+eclipse.buildId=4.4.1.M20140925-0400
+java.version=1.8.0_20
+java.vendor=Oracle Corporation
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=es_ES
+Framework arguments:  -product org.eclipse.epp.package.standard.product -product org.eclipse.epp.package.standard.product -keyring /Users/christianperezgonzalez/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.standard.product -data /Users/christianperezgonzalez/Documents/Almacenero -product org.eclipse.epp.package.standard.product -keyring /Users/christianperezgonzalez/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2014-11-19 21:48:04.992
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.jdt.core 4 0 2014-11-19 21:49:44.734
+!MESSAGE Invalid ZIP archive: lib/mysql-connector-java-5.1.22-bin.jar [in Almacen]
+
+!ENTRY org.eclipse.jdt.launching 4 150 2014-11-19 21:49:59.737
+!MESSAGE The archive: /Almacen/lib/mysql-connector-java-5.1.22-bin.jar which is referenced by the classpath, does not exist.
+
+!ENTRY org.eclipse.jdt.core 4 0 2014-11-19 21:50:39.628
+!MESSAGE Invalid ZIP archive: lib/mysql-connector-java-5.1.22-bin.jar [in Almacen]
+
+!ENTRY org.eclipse.jdt.launching 4 150 2014-11-19 21:52:48.617
+!MESSAGE The archive: /Almacen/lib/mysql-connector-java-5.1.22-bin.jar which is referenced by the classpath, does not exist.

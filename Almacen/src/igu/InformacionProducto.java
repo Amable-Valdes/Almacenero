@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import java.awt.GridLayout;
 import java.util.Collections;
@@ -17,8 +18,11 @@ import logica.Producto;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JScrollPane;
+
 import java.awt.Font;
+
 import javax.swing.SwingConstants;
 
 public class InformacionProducto extends JDialog {
@@ -65,7 +69,7 @@ public class InformacionProducto extends JDialog {
 	 * Create the dialog.
 	 */
 	public InformacionProducto(Main m,List<Producto> _listaProductos) {
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setResizable(false);
 		setLocationRelativeTo(m);
@@ -155,6 +159,7 @@ public class InformacionProducto extends JDialog {
 		if (btSiguiente == null) {
 			btSiguiente = new JButton("Siguiente");
 			btSiguiente.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					if(productoSeleccionado<listaProductos.size()-1)
 					{
@@ -172,6 +177,7 @@ public class InformacionProducto extends JDialog {
 		if (btAtras == null) {
 			btAtras = new JButton("Atras");
 			btAtras.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					if(productoSeleccionado>0)
 					{
@@ -281,6 +287,7 @@ public class InformacionProducto extends JDialog {
 		if (btSalir == null) {
 			btSalir = new JButton("Volver");
 			btSalir.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
 				}
@@ -328,6 +335,7 @@ public class InformacionProducto extends JDialog {
 		if (btRecogido == null) {
 			btRecogido = new JButton("Producto Recogido");
 			btRecogido.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					ventanaPrincipal.MarcarDatoLista(listaProductos.get(productoSeleccionado));
 					

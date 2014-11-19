@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import java.awt.FlowLayout;
 
@@ -54,6 +55,7 @@ public class Lector extends JDialog {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					ArrayList<Producto> prodPrueba = new ArrayList<Producto>();
@@ -62,7 +64,7 @@ public class Lector extends JDialog {
 					prodPrueba.add(new Producto(3, "a", "bbb"));
 					prodPrueba.add(new Producto(4, "a", "bbb"));
 					Lector dialog = new Lector(new Bulto(prodPrueba));
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -75,7 +77,7 @@ public class Lector extends JDialog {
 	 * Create the dialog.
 	 */
 	public Lector(Bulto bultoARecoger) {
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 300, 300);
 		getContentPane().add(getPanel_Centro(), BorderLayout.CENTER);
 		getContentPane().add(getPanel_BotonesDefecto(), BorderLayout.SOUTH);
@@ -125,6 +127,7 @@ public class Lector extends JDialog {
 		if (bt_Salir == null) {
 			bt_Salir = new JButton("Salir");
 			bt_Salir.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					salir();
 				}
@@ -227,6 +230,7 @@ public class Lector extends JDialog {
 		if (bt_Reducir == null) {
 			bt_Reducir = new JButton("-");
 			bt_Reducir.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					if (Integer.valueOf(txF_Cantidad.getText()) > 1)
 						txF_Cantidad.setText((Integer.valueOf(txF_Cantidad
@@ -241,6 +245,7 @@ public class Lector extends JDialog {
 		if (bt_Añadir == null) {
 			bt_Añadir = new JButton("+");
 			bt_Añadir.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					if (Integer.valueOf(txF_Cantidad.getText()) < productos
 							.getCantidad())
@@ -289,6 +294,7 @@ public class Lector extends JDialog {
 		if (bt_Recoger == null) {
 			bt_Recoger = new JButton("Recoger");
 			bt_Recoger.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					int i = 0;
 					for (i = 0; i < Integer.valueOf(txF_Cantidad.getText()); i++)
@@ -306,6 +312,7 @@ public class Lector extends JDialog {
 		if (bt_Empaquetar == null) {
 			bt_Empaquetar = new JButton("Empaquetar");
 			bt_Empaquetar.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					int i = 0;
 					for (i = 0; i < Integer.valueOf(txF_Cantidad.getText()); i++)
@@ -344,7 +351,7 @@ public class Lector extends JDialog {
 				}
 			}
 			Lector dialog = new Lector(new Bulto(productosNuevos));
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 			this.setVisible(false);
 		}
@@ -359,7 +366,7 @@ public class Lector extends JDialog {
 					}
 				}
 				Lector dialog = new Lector(new Bulto(productosNuevos));
-				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 				dialog.setVisible(true);
 				this.setVisible(false);
 			}

@@ -116,6 +116,7 @@ public class Main extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					Main frame = new Main();
@@ -206,6 +207,7 @@ public class Main extends JFrame {
 			bt_Continuar = new JButton("Continuar");
 			bt_Continuar.setEnabled(false);
 			bt_Continuar.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					borrarDatosProductos();
 					cargarDatosProductos(tabla_Pedidos.getSelectedRow());
@@ -282,6 +284,7 @@ public class Main extends JFrame {
 		if (bt_Continuar_Productos == null) {
 			bt_Continuar_Productos = new JButton("Continuar");
 			bt_Continuar_Productos.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					
 					ArrayList<Producto> productosSeleccionados = new ArrayList<Producto>();
@@ -310,6 +313,7 @@ public class Main extends JFrame {
 		if (bt_Atras_Productos == null) {
 			bt_Atras_Productos = new JButton("Atras");
 			bt_Atras_Productos.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					tabla_productos = null;
 					for (int i = 0; i < modeloTablaProd.getRowCount(); i++) {
@@ -435,6 +439,7 @@ public class Main extends JFrame {
 		if (btSiguiente == null) {
 			btSiguiente = new JButton("Siguiente");
 			btSiguiente.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					if(productoSeleccionado<listaProductosSeleccionados.size()-1)
 					{
@@ -453,6 +458,7 @@ public class Main extends JFrame {
 		if (btAtras == null) {
 			btAtras = new JButton("Atras");
 			btAtras.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					if(productoSeleccionado>0)
 					{
@@ -480,6 +486,7 @@ public class Main extends JFrame {
 		if (button_2 == null) {
 			button_2 = new JButton("Volver");
 			button_2.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Productos");
 					lb_Información.setText("Selecciona los productos que deseas recoger");
@@ -510,6 +517,7 @@ public class Main extends JFrame {
 		if (btRecogido == null) {
 			btRecogido = new JButton("Producto Recogido");
 			btRecogido.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					MarcarDatoLista(listaProductosSeleccionados.get(productoSeleccionado));
 					
@@ -733,6 +741,7 @@ public class Main extends JFrame {
 		if (bt_Si == null) {
 			bt_Si = new JButton("Si");
 			bt_Si.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					if(pesoTotalPedSeleccionados > Producto.PESO_GRANDE)
 					{
@@ -783,6 +792,7 @@ public class Main extends JFrame {
 		if (bt_No == null) {
 			bt_No = new JButton("No");
 			bt_No.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Productos");
 					lb_Información.setText("Selecciona los productos que deseas recoger");
@@ -821,13 +831,14 @@ public class Main extends JFrame {
 		if (btnSeleccionarTodo == null) {
 			btnSeleccionarTodo = new JButton("Seleccionar todo");
 			btnSeleccionarTodo.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					int[] a = new int[modeloListaProductos.getSize()];
+					/*int[] a = new int[modeloListaProductos.getSize()];
 					for (int i = 0; i < modeloListaProductos.getSize(); i++) {
 						a[i]=i;
-					}
-					
-					list_Productos.setSelectedIndices(a);
+					}*/
+
+					tabla_productos.selectAll();
 				}
 			});
 		}
