@@ -72,6 +72,8 @@ public class Lector extends JDialog {
 							estado));
 					prodPrueba.add(new Producto(4, "Producto almacén", "aaa",
 							estado));
+					prodPrueba.add(new Producto(4, "Prod diferente", "bbb",
+							estado));
 					Lector dialog = new Lector(new Bulto(prodPrueba));
 					dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
@@ -101,9 +103,11 @@ public class Lector extends JDialog {
 	private int SeleccionarModoEjecucion() {
 		if (quedaAlgunoPorRecoger()) {
 			seleccionarProductosSinRecoger();
+			seleccionarIdenticos();
 			return RECOGER;
 		} else {
 			seleccionarProductosRecogidos();
+			seleccionarIdenticos();
 			return EMPAQUETAR;
 		}
 	}
@@ -122,6 +126,18 @@ public class Lector extends JDialog {
 		ArrayList<Producto> productosNuevos = new ArrayList<Producto>();
 		for (Producto p : productos.getProductos()) {
 			if (p.getEstado_producto() == Producto.POR_RECOGER) {
+				productosNuevos.add(p);
+			}
+		}
+		productos = new Bulto(productosNuevos);
+	}
+	
+	private void seleccionarIdenticos()
+	{
+		ArrayList<Producto> productosNuevos = new ArrayList<Producto>();
+		Producto productoPivote = productos.getProductos().get(0);
+		for (Producto p : productos.getProductos()) {
+			if (p.getOrder_product_code().equals(productoPivote.getOrder_product_code())) {
 				productosNuevos.add(p);
 			}
 		}
