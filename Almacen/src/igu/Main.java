@@ -11,6 +11,7 @@ import java.awt.CardLayout;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 
@@ -34,6 +35,7 @@ import java.awt.Font;
 
 import javax.swing.JTextArea;
 import javax.swing.JTable;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -141,6 +143,7 @@ public class Main extends JFrame {
 		setContentPane(contentPane);
 		contentPane.add(getPanel_Informacion(), BorderLayout.NORTH);
 		contentPane.add(getPanel_Pestañas(), BorderLayout.CENTER);
+		contentPane.add(getBt_Incidencias(), BorderLayout.SOUTH);
 
 		//cargarPruebas();
 		cargarDatosPedidos();
@@ -273,7 +276,7 @@ public class Main extends JFrame {
 	private JPanel getPanel_Botones_Productos() {
 		if (panel_Botones_Productos == null) {
 			panel_Botones_Productos = new JPanel();
-			panel_Botones_Productos.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_Botones_Productos.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 			panel_Botones_Productos.add(getBt_Continuar_Productos());
 			panel_Botones_Productos.add(getBt_Atras_Productos());
 			panel_Botones_Productos.add(getBtnSeleccionarTodo());
@@ -283,6 +286,7 @@ public class Main extends JFrame {
 	private JButton getBt_Continuar_Productos() {
 		if (bt_Continuar_Productos == null) {
 			bt_Continuar_Productos = new JButton("Continuar");
+			bt_Continuar_Productos.setFont(new Font("Tahoma", Font.PLAIN, 10));
 			bt_Continuar_Productos.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -312,6 +316,7 @@ public class Main extends JFrame {
 	private JButton getBt_Atras_Productos() {
 		if (bt_Atras_Productos == null) {
 			bt_Atras_Productos = new JButton("Atras");
+			bt_Atras_Productos.setFont(new Font("Tahoma", Font.PLAIN, 10));
 			bt_Atras_Productos.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -830,6 +835,7 @@ public class Main extends JFrame {
 	private JButton getBtnSeleccionarTodo() {
 		if (btnSeleccionarTodo == null) {
 			btnSeleccionarTodo = new JButton("Seleccionar todo");
+			btnSeleccionarTodo.setFont(new Font("Tahoma", Font.PLAIN, 10));
 			btnSeleccionarTodo.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -956,13 +962,22 @@ public class Main extends JFrame {
 			panel_CentralTabla = new JPanel();
 			panel_CentralTabla.setLayout(new BorderLayout(0, 0));
 			panel_CentralTabla.add(getPanel_Scroll_Pedidos(), BorderLayout.CENTER);
-			panel_CentralTabla.add(getBt_Incidencias(), BorderLayout.SOUTH);
 		}
 		return panel_CentralTabla;
 	}
 	private JButton getBt_Incidencias() {
 		if (bt_Incidencias == null) {
 			bt_Incidencias = new JButton("Avisar de incidencia");
+			bt_Incidencias.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String seleccion = JOptionPane.showInputDialog(null,
+							"¿Que ha ocurrido?", "",
+							JOptionPane.QUESTION_MESSAGE);
+					if (seleccion != null)
+						JOptionPane.showMessageDialog(null,
+								"Aviso de incidencia realizado");
+				}
+			});
 		}
 		return bt_Incidencias;
 	}
