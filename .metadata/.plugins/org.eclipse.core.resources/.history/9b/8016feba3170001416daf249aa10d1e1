@@ -839,7 +839,7 @@ public class Main extends JFrame {
 					}*/
 
 					tabla_productos.selectAll();
-					//bt_Continuar_Productos.setEnabled(true);
+					bt_Continuar_Productos.setEnabled(true);
 				}
 			});
 		}

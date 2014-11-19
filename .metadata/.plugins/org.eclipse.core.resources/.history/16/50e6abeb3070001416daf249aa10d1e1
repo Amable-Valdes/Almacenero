@@ -34,6 +34,7 @@ import java.awt.Font;
 
 import javax.swing.JTextArea;
 import javax.swing.JTable;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -291,7 +292,7 @@ public class Main extends JFrame {
 					int[] seleccionados = tabla_productos.getSelectedRows();
 					
 					for(int i=0; i<seleccionados.length;i++){
-						productosSeleccionados.add(modeloListaProductos.get(seleccionados[i]));
+						productosSeleccionados.add((Producto) modeloTablaProd.getValueAt(seleccionados[i], i));
 					}
 					
 					listaProductosSeleccionados = productosSeleccionados;
@@ -839,7 +840,7 @@ public class Main extends JFrame {
 					}*/
 
 					tabla_productos.selectAll();
-					//bt_Continuar_Productos.setEnabled(true);
+					bt_Continuar_Productos.setEnabled(true);
 				}
 			});
 		}

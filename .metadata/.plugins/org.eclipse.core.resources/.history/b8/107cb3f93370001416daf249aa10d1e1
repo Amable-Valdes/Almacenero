@@ -858,7 +858,7 @@ public class Main extends JFrame {
 			
 			tabla_Pedidos.setRowSorter(modeloOrdenado);
 			tabla_Pedidos.getRowSorter().toggleSortOrder(2);
-			tabla_Pedidos.getRowSorter().toggleSortOrder(2);
+			
 			
 			tabla_Pedidos.addMouseListener(new MouseAdapter() {
 				@Override
