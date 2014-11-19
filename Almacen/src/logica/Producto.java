@@ -45,11 +45,11 @@ public class Producto implements Comparable<Producto> {
 	}*/
 	
 	//Constructor para pruebas
-	public Producto(int id, String nombre,String code) {
+	public Producto(int id, String nombre,String code, int estado) {
 		this.order_id = id;
 		this.order_product_name = nombre;
 		this.order_product_code = code;
-		this.estado_producto = Producto.POR_RECOGER;
+		this.estado_producto = estado;
 	}
 
 	@Override
