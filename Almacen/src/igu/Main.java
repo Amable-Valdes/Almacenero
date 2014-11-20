@@ -1,4 +1,5 @@
 package igu;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -86,7 +87,7 @@ public class Main extends JFrame {
 	private JLabel lbDimensionesInf;
 	private JLabel lbPeso;
 	private JLabel lbPesoInf;
-	
+
 	private List<Producto> listaProductosSeleccionados;
 	private int productoSeleccionado = 0;
 	private JLabel lbNombreProducto;
@@ -103,7 +104,7 @@ public class Main extends JFrame {
 	private JTable tabla_Pedidos;
 	protected JList<Producto> list_Pedidos;
 	private JTable tabla_productos;
-	
+
 	private ModeloNoEditable modeloTablaPed;
 	private TableRowSorter<ModeloNoEditable> modeloOrdenado;
 	private ModeloNoEditable modeloTablaProd;
@@ -145,20 +146,23 @@ public class Main extends JFrame {
 		contentPane.add(getPanel_Pestañas(), BorderLayout.CENTER);
 		contentPane.add(getBt_Incidencias(), BorderLayout.SOUTH);
 
-		//cargarPruebas();
+		// cargarPruebas();
 		cargarDatosPedidos();
 	}
+
 	private JPanel getPanel_Pestañas() {
 		if (panel_Pestañas == null) {
 			panel_Pestañas = new JPanel();
 			panel_Pestañas.setLayout(new CardLayout(5, 5));
 			panel_Pestañas.add(getPanel_Seleccionar_Pedidos(), "Pedidos");
-			panel_Pestañas.add(getPanel_Ampliar_Fragmentar(), "Fragmentar_Ampliar");
+			panel_Pestañas.add(getPanel_Ampliar_Fragmentar(),
+					"Fragmentar_Ampliar");
 			panel_Pestañas.add(getPanel_Seleccionar_Productos(), "Productos");
 			panel_Pestañas.add(getPanel_Informacion_Productos(), "Informacion");
 		}
 		return panel_Pestañas;
 	}
+
 	private JPanel getPanel_Informacion() {
 		if (panel_Informacion == null) {
 			panel_Informacion = new JPanel();
@@ -167,30 +171,39 @@ public class Main extends JFrame {
 		}
 		return panel_Informacion;
 	}
+
 	private JLabel getLb_Información() {
 		if (lb_Información == null) {
-			lb_Información = new JLabel("Selecciona los pedidos que deseas recoger");
+			lb_Información = new JLabel(
+					"Selecciona los pedidos que deseas recoger");
 		}
 		return lb_Información;
 	}
+
 	private JPanel getPanel_Seleccionar_Pedidos() {
 		if (panel_Seleccionar_Pedidos == null) {
 			panel_Seleccionar_Pedidos = new JPanel();
 			panel_Seleccionar_Pedidos.setLayout(new BorderLayout(0, 0));
-			panel_Seleccionar_Pedidos.add(getPanel_Botones_Pedidos(), BorderLayout.SOUTH);
-			panel_Seleccionar_Pedidos.add(getPanel_CentralTabla(), BorderLayout.CENTER);
+			panel_Seleccionar_Pedidos.add(getPanel_Botones_Pedidos(),
+					BorderLayout.SOUTH);
+			panel_Seleccionar_Pedidos.add(getPanel_CentralTabla(),
+					BorderLayout.CENTER);
 		}
 		return panel_Seleccionar_Pedidos;
 	}
+
 	private JPanel getPanel_Seleccionar_Productos() {
 		if (panel_Seleccionar_Productos == null) {
 			panel_Seleccionar_Productos = new JPanel();
 			panel_Seleccionar_Productos.setLayout(new BorderLayout(0, 0));
-			panel_Seleccionar_Productos.add(getPanel_Scroll_Productos(), BorderLayout.CENTER);
-			panel_Seleccionar_Productos.add(getPanel_Botones_Productos(), BorderLayout.SOUTH);
+			panel_Seleccionar_Productos.add(getPanel_Scroll_Productos(),
+					BorderLayout.CENTER);
+			panel_Seleccionar_Productos.add(getPanel_Botones_Productos(),
+					BorderLayout.SOUTH);
 		}
 		return panel_Seleccionar_Productos;
 	}
+
 	private JScrollPane getPanel_Scroll_Pedidos() {
 		if (panel_Scroll_Pedidos == null) {
 			panel_Scroll_Pedidos = new JScrollPane();
@@ -198,6 +211,7 @@ public class Main extends JFrame {
 		}
 		return panel_Scroll_Pedidos;
 	}
+
 	private JScrollPane getPanel_Scroll_Productos() {
 		if (panel_Scroll_Productos == null) {
 			panel_Scroll_Productos = new JScrollPane();
@@ -205,6 +219,7 @@ public class Main extends JFrame {
 		}
 		return panel_Scroll_Productos;
 	}
+
 	private JButton getBt_Continuar() {
 		if (bt_Continuar == null) {
 			bt_Continuar = new JButton("Continuar");
@@ -214,58 +229,64 @@ public class Main extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					borrarDatosProductos();
 					cargarDatosProductos(tabla_Pedidos.getSelectedRow());
-					
-					((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Productos");
-					
-					lb_Información.setText("Selecciona los productos que deseas recoger");
-					
-					/*modeloListaProductos.clear();
-					int[] seleccionados = list_Pedidos.getSelectedIndices();
-					
-					ArrayList<Producto> listaProductos = null;
-					double pesoTotal = 0;
-					for(int i=0; i<seleccionados.length;i++){
-						listaProductos = modeloListaPedidos.get(seleccionados[i]).getProductos();
-						for(int j=0; j<listaProductos.size();j++){
-							modeloListaProductos.addElement(listaProductos.get(j));
-							if(listaProductos.get(j).getEstado_producto() == Producto.POR_RECOGER)
-								pesoTotal= pesoTotal + listaProductos.get(j).getPeso();
-						}
-					}
-					if(pesoTotal <= Producto.PESO_GRANDE && pesoTotal >= Producto.PESO_PEQUEÑO)
-					{
-						((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Productos");
-						
-						lb_Información.setText("Selecciona los productos que deseas recoger");
-						
-					
-					}
-					if(pesoTotal > Producto.PESO_GRANDE)
-					{
-						((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Fragmentar_Ampliar");
-						
-						lb_Información.setText("Selecciona la opción que desees");
-						
-						
-						txArea_Mensaje_Frag_Ampl.setText("El/Los pedidos seleccionados son muy grandes "
-								+ "¿Deseas que el sistema te seleccione solo los más pequeños?");
-					}
-					if(pesoTotal < Producto.PESO_PEQUEÑO)
-					{
-						((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Fragmentar_Ampliar");
-						
-						lb_Información.setText("Selecciona la opción que desees");
-						
-						
-						txArea_Mensaje_Frag_Ampl.setText("El/Los pedidos seleccionados son muy pequeños "
-								+ "¿Deseas que el sistema te seleccione otros productos de otros pedidos para ahorrar tiempo?");
-					}
-					pesoTotalPedSeleccionados = pesoTotal;*/
+
+					((CardLayout) panel_Pestañas.getLayout()).show(
+							panel_Pestañas, "Productos");
+
+					lb_Información
+							.setText("Selecciona los productos que deseas recoger");
+
+					/*
+					 * modeloListaProductos.clear(); int[] seleccionados =
+					 * list_Pedidos.getSelectedIndices();
+					 * 
+					 * ArrayList<Producto> listaProductos = null; double
+					 * pesoTotal = 0; for(int i=0; i<seleccionados.length;i++){
+					 * listaProductos =
+					 * modeloListaPedidos.get(seleccionados[i]).getProductos();
+					 * for(int j=0; j<listaProductos.size();j++){
+					 * modeloListaProductos.addElement(listaProductos.get(j));
+					 * if(listaProductos.get(j).getEstado_producto() ==
+					 * Producto.POR_RECOGER) pesoTotal= pesoTotal +
+					 * listaProductos.get(j).getPeso(); } } if(pesoTotal <=
+					 * Producto.PESO_GRANDE && pesoTotal >=
+					 * Producto.PESO_PEQUEÑO) {
+					 * ((CardLayout)panel_Pestañas.getLayout
+					 * ()).show(panel_Pestañas, "Productos");
+					 * 
+					 * lb_Información.setText(
+					 * "Selecciona los productos que deseas recoger");
+					 * 
+					 * 
+					 * } if(pesoTotal > Producto.PESO_GRANDE) {
+					 * ((CardLayout)panel_Pestañas
+					 * .getLayout()).show(panel_Pestañas, "Fragmentar_Ampliar");
+					 * 
+					 * lb_Información.setText("Selecciona la opción que desees");
+					 * 
+					 * 
+					 * txArea_Mensaje_Frag_Ampl.setText(
+					 * "El/Los pedidos seleccionados son muy grandes " +
+					 * "¿Deseas que el sistema te seleccione solo los más pequeños?"
+					 * ); } if(pesoTotal < Producto.PESO_PEQUEÑO) {
+					 * ((CardLayout)
+					 * panel_Pestañas.getLayout()).show(panel_Pestañas,
+					 * "Fragmentar_Ampliar");
+					 * 
+					 * lb_Información.setText("Selecciona la opción que desees");
+					 * 
+					 * 
+					 * txArea_Mensaje_Frag_Ampl.setText(
+					 * "El/Los pedidos seleccionados son muy pequeños " +
+					 * "¿Deseas que el sistema te seleccione otros productos de otros pedidos para ahorrar tiempo?"
+					 * ); } pesoTotalPedSeleccionados = pesoTotal;
+					 */
 				}
 			});
 		}
 		return bt_Continuar;
 	}
+
 	private JPanel getPanel_Botones_Pedidos() {
 		if (panel_Botones_Pedidos == null) {
 			panel_Botones_Pedidos = new JPanel();
@@ -273,16 +294,19 @@ public class Main extends JFrame {
 		}
 		return panel_Botones_Pedidos;
 	}
+
 	private JPanel getPanel_Botones_Productos() {
 		if (panel_Botones_Productos == null) {
 			panel_Botones_Productos = new JPanel();
-			panel_Botones_Productos.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			panel_Botones_Productos.setLayout(new FlowLayout(FlowLayout.CENTER,
+					5, 5));
 			panel_Botones_Productos.add(getBt_Continuar_Productos());
 			panel_Botones_Productos.add(getBt_Atras_Productos());
 			panel_Botones_Productos.add(getBtnSeleccionarTodo());
 		}
 		return panel_Botones_Productos;
 	}
+
 	private JButton getBt_Continuar_Productos() {
 		if (bt_Continuar_Productos == null) {
 			bt_Continuar_Productos = new JButton("Continuar");
@@ -290,29 +314,32 @@ public class Main extends JFrame {
 			bt_Continuar_Productos.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					
+
 					ArrayList<Producto> productosSeleccionados = new ArrayList<Producto>();
 					int[] seleccionados = tabla_productos.getSelectedRows();
-					
-					for(int i=0; i<seleccionados.length;i++){
-						productosSeleccionados.add(modeloListaProductos.get(seleccionados[i]));
+
+					for (int i = 0; i < seleccionados.length; i++) {
+						productosSeleccionados.add(modeloListaProductos
+								.get(seleccionados[i]));
 					}
-					
+
 					listaProductosSeleccionados = productosSeleccionados;
 					Collections.sort(listaProductosSeleccionados);
 					cargarInformacionProducto();
 					cargarBotones();
-					
-					((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Informacion");
-					lb_Información.setText("Recoge en el almacén los siguientes productos");
-					
-					
+
+					((CardLayout) panel_Pestañas.getLayout()).show(
+							panel_Pestañas, "Informacion");
+					lb_Información
+							.setText("Recoge en el almacén los siguientes productos");
+
 				}
 			});
 			bt_Continuar_Productos.setEnabled(false);
 		}
 		return bt_Continuar_Productos;
 	}
+
 	private JButton getBt_Atras_Productos() {
 		if (bt_Atras_Productos == null) {
 			bt_Atras_Productos = new JButton("Atras");
@@ -320,98 +347,89 @@ public class Main extends JFrame {
 			bt_Atras_Productos.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					tabla_productos = null;
-					for (int i = 0; i < modeloTablaProd.getRowCount(); i++) {
-						modeloTablaProd.removeRow(i);
-					}
-					tabla_productos=getTabla_productos();
-					((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Pedidos");
-					lb_Información.setText("Selecciona los pedidos que deseas recoger");
-					
+					// tabla_productos = null;
+					// for (int i = 0; i < modeloTablaProd.getRowCount(); i++) {
+					// modeloTablaProd.removeRow(i);
+					// }
+					// tabla_productos=getTabla_productos();
+					((CardLayout) panel_Pestañas.getLayout()).show(
+							panel_Pestañas, "Pedidos");
+					lb_Información
+							.setText("Selecciona los pedidos que deseas recoger");
+
 					borrarDatosProductos();
 				}
 			});
 		}
 		return bt_Atras_Productos;
 	}
-	
-	public void MarcarDatoLista(Producto p)
-	{
+
+	public void MarcarDatoLista(Producto p) {
 		ArrayList<Producto> productos = new ArrayList<Producto>();
-		
-		for(int i=0; i<modeloListaProductos.size();i++){
+
+		for (int i = 0; i < modeloListaProductos.size(); i++) {
 			productos.add(modeloListaProductos.get(i));
 		}
-		
+
 		modeloListaProductos.clear();
-		
-		for(int i=0; i<productos.size();i++){
-			if(productos.get(i).equals(p))
+
+		for (int i = 0; i < productos.size(); i++) {
+			if (productos.get(i).equals(p))
 				productos.get(i).setEstado_producto(Producto.RECOGIDO);
 			modeloListaProductos.addElement(productos.get(i));
 		}
-		
-		modeloListaProductos.get(modeloListaProductos.indexOf(p)).setEstado_producto(Producto.RECOGIDO);
+
+		modeloListaProductos.get(modeloListaProductos.indexOf(p))
+				.setEstado_producto(Producto.RECOGIDO);
 	}
-	
-	
+
 	/*
-	public void abrirJDialog()
-	{
-		ArrayList<Producto> productosSeleccionados = new ArrayList<Producto>();
-		int[] seleccionados = list_Productos.getSelectedIndices();
-		
-		for(int i=0; i<seleccionados.length;i++){
-			productosSeleccionados.add(modeloListaProductos.get(seleccionados[i]));
-		}
-		
-		JDialog ventanaSecundaria = new InformacionProducto(this, productosSeleccionados);
-		ventanaSecundaria.setVisible(true);
-	}*/
-	
+	 * public void abrirJDialog() { ArrayList<Producto> productosSeleccionados =
+	 * new ArrayList<Producto>(); int[] seleccionados =
+	 * list_Productos.getSelectedIndices();
+	 * 
+	 * for(int i=0; i<seleccionados.length;i++){
+	 * productosSeleccionados.add(modeloListaProductos.get(seleccionados[i])); }
+	 * 
+	 * JDialog ventanaSecundaria = new InformacionProducto(this,
+	 * productosSeleccionados); ventanaSecundaria.setVisible(true); }
+	 */
+
 	/*
-	public void cargarPruebas()
-	{
-		
-		Random r = new Random();
-		int valorPasillo = r.nextInt(6)+1;
-		int valorEstanteria = r.nextInt(3)+1;
-		int valorAltura = r.nextInt(3)+1;
-		
-		for(int i = 0; i<r.nextInt(10)+1; i++)
-		{
-			Pedido p = new Pedido();
-			p.setId(i);
-			for(int j = 0; j<r.nextInt(10)+1; j++)
-			{
-				p.añadirProducto(new Producto(i, "Prod: "+j, 
-						(""+ valorPasillo +"-"+valorEstanteria+"-"+valorAltura),
-						"AAA", r.nextInt(5)+1, r.nextInt(5)+1, r.nextInt(5)+1, r.nextInt(10)+1,Producto.POR_RECOGER));
-			}
-			modeloListaPedidos.addElement(p);
-		}
-	}
-	*/
-	
-	public void cargarDatosPedidos()
-	{
+	 * public void cargarPruebas() {
+	 * 
+	 * Random r = new Random(); int valorPasillo = r.nextInt(6)+1; int
+	 * valorEstanteria = r.nextInt(3)+1; int valorAltura = r.nextInt(3)+1;
+	 * 
+	 * for(int i = 0; i<r.nextInt(10)+1; i++) { Pedido p = new Pedido();
+	 * p.setId(i); for(int j = 0; j<r.nextInt(10)+1; j++) { p.añadirProducto(new
+	 * Producto(i, "Prod: "+j, (""+ valorPasillo
+	 * +"-"+valorEstanteria+"-"+valorAltura), "AAA", r.nextInt(5)+1,
+	 * r.nextInt(5)+1, r.nextInt(5)+1, r.nextInt(10)+1,Producto.POR_RECOGER)); }
+	 * modeloListaPedidos.addElement(p); } }
+	 */
+
+	public void cargarDatosPedidos() {
 		Gestor g = new Gestor();
 		g.generaPedidos();
 		ArrayList<Pedido> a = g.getPedidos();
-		for(Pedido p : a)
+		for (Pedido p : a)
 			modeloListaPedidos.addElement(p);
 		añadirDatosTablaPedidos();
 	}
-	
+
 	private JPanel getPanel_Informacion_Productos() {
 		if (panel_Informacion_Productos == null) {
 			panel_Informacion_Productos = new JPanel();
 			panel_Informacion_Productos.setLayout(new BorderLayout(0, 0));
-			panel_Informacion_Productos.add(getPanel_Datos(), BorderLayout.CENTER);
-			panel_Informacion_Productos.add(getPanel_Avanzar(), BorderLayout.SOUTH);
+			panel_Informacion_Productos.add(getPanel_Datos(),
+					BorderLayout.CENTER);
+			panel_Informacion_Productos.add(getPanel_Avanzar(),
+					BorderLayout.SOUTH);
 		}
 		return panel_Informacion_Productos;
 	}
+
 	private JPanel getPanel_Datos() {
 		if (panel_Datos == null) {
 			panel_Datos = new JPanel();
@@ -422,6 +440,7 @@ public class Main extends JFrame {
 		}
 		return panel_Datos;
 	}
+
 	private JPanel getPanel_Avanzar() {
 		if (panel_Avanzar == null) {
 			panel_Avanzar = new JPanel();
@@ -431,6 +450,7 @@ public class Main extends JFrame {
 		}
 		return panel_Avanzar;
 	}
+
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
@@ -440,18 +460,19 @@ public class Main extends JFrame {
 		}
 		return panel;
 	}
+
 	private JButton getBtSiguiente() {
 		if (btSiguiente == null) {
 			btSiguiente = new JButton("Siguiente");
 			btSiguiente.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					if(productoSeleccionado<listaProductosSeleccionados.size()-1)
-					{
+					if (productoSeleccionado < listaProductosSeleccionados
+							.size() - 1) {
 						productoSeleccionado++;
 					}
 					cargarInformacionProducto();
-					
+
 					cargarBotones();
 				}
 			});
@@ -459,18 +480,18 @@ public class Main extends JFrame {
 		}
 		return btSiguiente;
 	}
+
 	private JButton getBtAtras() {
 		if (btAtras == null) {
 			btAtras = new JButton("Atras");
 			btAtras.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					if(productoSeleccionado>0)
-					{
+					if (productoSeleccionado > 0) {
 						productoSeleccionado--;
 					}
 					cargarInformacionProducto();
-					
+
 					cargarBotones();
 				}
 			});
@@ -478,6 +499,7 @@ public class Main extends JFrame {
 		}
 		return btAtras;
 	}
+
 	private JPanel getPanel_1() {
 		if (panel_1 == null) {
 			panel_1 = new JPanel();
@@ -487,15 +509,18 @@ public class Main extends JFrame {
 		}
 		return panel_1;
 	}
+
 	private JButton getButton_2() {
 		if (button_2 == null) {
 			button_2 = new JButton("Volver");
 			button_2.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Productos");
-					lb_Información.setText("Selecciona los productos que deseas recoger");
-					
+					((CardLayout) panel_Pestañas.getLayout()).show(
+							panel_Pestañas, "Productos");
+					lb_Información
+							.setText("Selecciona los productos que deseas recoger");
+
 					productoSeleccionado = 0;
 					listaProductosSeleccionados = null;
 				}
@@ -503,6 +528,7 @@ public class Main extends JFrame {
 		}
 		return button_2;
 	}
+
 	private JLabel getLbNombreInf() {
 		if (lbNombreInf == null) {
 			lbNombreInf = new JLabel("<dynamic>");
@@ -511,6 +537,7 @@ public class Main extends JFrame {
 		}
 		return lbNombreInf;
 	}
+
 	private JPanel getPanel_2() {
 		if (panel_2 == null) {
 			panel_2 = new JPanel();
@@ -518,20 +545,21 @@ public class Main extends JFrame {
 		}
 		return panel_2;
 	}
+
 	private JButton getBtRecogido() {
 		if (btRecogido == null) {
 			btRecogido = new JButton("Producto Recogido");
 			btRecogido.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					MarcarDatoLista(listaProductosSeleccionados.get(productoSeleccionado));
-					
-					if(listaProductosSeleccionados.get(productoSeleccionado).getEstado_producto()==Producto.RECOGIDO)
-					{
+					MarcarDatoLista(listaProductosSeleccionados
+							.get(productoSeleccionado));
+
+					if (listaProductosSeleccionados.get(productoSeleccionado)
+							.getEstado_producto() == Producto.RECOGIDO) {
 						btRecogido.setEnabled(false);
 						btRecogido.setText("Ya Recogido");
-					}
-					else{
+					} else {
 						btRecogido.setEnabled(true);
 						btRecogido.setText("Producto Recogido");
 					}
@@ -540,6 +568,7 @@ public class Main extends JFrame {
 		}
 		return btRecogido;
 	}
+
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -547,6 +576,7 @@ public class Main extends JFrame {
 		}
 		return scrollPane;
 	}
+
 	private JPanel getPanel_3() {
 		if (panel_3 == null) {
 			panel_3 = new JPanel();
@@ -570,12 +600,14 @@ public class Main extends JFrame {
 		}
 		return panel_3;
 	}
+
 	private JLabel getLbIDPed() {
 		if (lbIDPed == null) {
 			lbIDPed = new JLabel("ID Pedido:");
 		}
 		return lbIDPed;
 	}
+
 	private JLabel getLbIDPedInf() {
 		if (lbIDPedInf == null) {
 			lbIDPedInf = new JLabel();
@@ -583,157 +615,191 @@ public class Main extends JFrame {
 		}
 		return lbIDPedInf;
 	}
+
 	private JLabel getLbCodigo() {
 		if (lbCodigo == null) {
 			lbCodigo = new JLabel("C\u00F3digo Producto:");
 		}
 		return lbCodigo;
 	}
+
 	private JLabel getLbCodigoInf() {
 		if (lbCodigoInf == null) {
 			lbCodigoInf = new JLabel("<dynamic>");
 		}
 		return lbCodigoInf;
 	}
+
 	private JLabel getLbPasillo() {
 		if (lbPasillo == null) {
 			lbPasillo = new JLabel("Pasillo Producto:");
 		}
 		return lbPasillo;
 	}
+
 	private JLabel getLbPasilloInf() {
 		if (lbPasilloInf == null) {
 			lbPasilloInf = new JLabel("<dynamic>");
 		}
 		return lbPasilloInf;
 	}
+
 	private JLabel getLbEstanteria() {
 		if (lbEstanteria == null) {
 			lbEstanteria = new JLabel("Estanter\u00EDa Producto:");
 		}
 		return lbEstanteria;
 	}
+
 	private JLabel getLbEstanteriaInf() {
 		if (lbEstanteriaInf == null) {
 			lbEstanteriaInf = new JLabel("<dynamic>");
 		}
 		return lbEstanteriaInf;
 	}
+
 	private JLabel getLbAltura() {
 		if (lbAltura == null) {
 			lbAltura = new JLabel("Altura Producto:");
 		}
 		return lbAltura;
 	}
+
 	private JLabel getLbAlturaInf() {
 		if (lbAlturaInf == null) {
 			lbAlturaInf = new JLabel("<dynamic>");
 		}
 		return lbAlturaInf;
 	}
+
 	private JLabel getLbDimensiones() {
 		if (lbDimensiones == null) {
 			lbDimensiones = new JLabel("Dimensiones:");
 		}
 		return lbDimensiones;
 	}
+
 	private JLabel getLbDimensionesInf() {
 		if (lbDimensionesInf == null) {
 			lbDimensionesInf = new JLabel("0m x 0m x 0m");
 		}
 		return lbDimensionesInf;
 	}
+
 	private JLabel getLbPeso() {
 		if (lbPeso == null) {
 			lbPeso = new JLabel("Peso:");
 		}
 		return lbPeso;
 	}
+
 	private JLabel getLbPesoInf() {
 		if (lbPesoInf == null) {
 			lbPesoInf = new JLabel("0 kg");
 		}
 		return lbPesoInf;
 	}
-	
-	private void cargarInformacionProducto()
-	{
-		lbNombreInf.setText("Producto "+ (productoSeleccionado+1) + " de " + listaProductosSeleccionados.size());
-		
-		lbNombreProductoInf.setText(""+listaProductosSeleccionados.get(productoSeleccionado).getOrder_product_name());
-		lbIDPedInf.setText(""+listaProductosSeleccionados.get(productoSeleccionado).getOrder_id());
-		lbCodigoInf.setText(""+listaProductosSeleccionados.get(productoSeleccionado).getOrder_product_code());
-		lbPasilloInf.setText(""+listaProductosSeleccionados.get(productoSeleccionado).getLocation().split("-")[0]);
-		lbEstanteriaInf.setText(""+listaProductosSeleccionados.get(productoSeleccionado).getLocation().split("-")[1]);
-		lbAlturaInf.setText(""+listaProductosSeleccionados.get(productoSeleccionado).getLocation().split("-")[2]);
-		lbDimensionesInf.setText(""+listaProductosSeleccionados.get(productoSeleccionado).getAncho() + "m x " +
-				listaProductosSeleccionados.get(productoSeleccionado).getAlto() + "m x " +
-				listaProductosSeleccionados.get(productoSeleccionado).getLargo() + "m");
-		lbPesoInf.setText(""+listaProductosSeleccionados.get(productoSeleccionado).getPeso()+" kg");
-		
-		if(listaProductosSeleccionados.get(productoSeleccionado).getEstado_producto()==Producto.RECOGIDO)
-		{
+
+	private void cargarInformacionProducto() {
+		lbNombreInf.setText("Producto " + (productoSeleccionado + 1) + " de "
+				+ listaProductosSeleccionados.size());
+
+		lbNombreProductoInf.setText(""
+				+ listaProductosSeleccionados.get(productoSeleccionado)
+						.getOrder_product_name());
+		lbIDPedInf.setText(""
+				+ listaProductosSeleccionados.get(productoSeleccionado)
+						.getOrder_id());
+		lbCodigoInf.setText(""
+				+ listaProductosSeleccionados.get(productoSeleccionado)
+						.getOrder_product_code());
+		lbPasilloInf.setText(""
+				+ listaProductosSeleccionados.get(productoSeleccionado)
+						.getLocation().split("-")[0]);
+		lbEstanteriaInf.setText(""
+				+ listaProductosSeleccionados.get(productoSeleccionado)
+						.getLocation().split("-")[1]);
+		lbAlturaInf.setText(""
+				+ listaProductosSeleccionados.get(productoSeleccionado)
+						.getLocation().split("-")[2]);
+		lbDimensionesInf.setText(""
+				+ listaProductosSeleccionados.get(productoSeleccionado)
+						.getAncho()
+				+ "m x "
+				+ listaProductosSeleccionados.get(productoSeleccionado)
+						.getAlto()
+				+ "m x "
+				+ listaProductosSeleccionados.get(productoSeleccionado)
+						.getLargo() + "m");
+		lbPesoInf.setText(""
+				+ listaProductosSeleccionados.get(productoSeleccionado)
+						.getPeso() + " kg");
+
+		if (listaProductosSeleccionados.get(productoSeleccionado)
+				.getEstado_producto() == Producto.RECOGIDO) {
 			btRecogido.setEnabled(false);
 			btRecogido.setText("Ya Recogido");
-		}
-		else{
+		} else {
 			btRecogido.setEnabled(true);
 			btRecogido.setText("Producto Recogido");
 		}
 	}
-	
-	private void cargarBotones()
-	{
+
+	private void cargarBotones() {
 		btSiguiente.setEnabled(true);
 		btAtras.setEnabled(true);
-		
-		if(productoSeleccionado == 0)
-		{
+
+		if (productoSeleccionado == 0) {
 			btSiguiente.setEnabled(true);
 			btAtras.setEnabled(false);
 		}
-		if(productoSeleccionado == (listaProductosSeleccionados.size()-1)){
+		if (productoSeleccionado == (listaProductosSeleccionados.size() - 1)) {
 			btSiguiente.setEnabled(false);
 			btAtras.setEnabled(true);
 		}
-		
-		if(productoSeleccionado == (listaProductosSeleccionados.size()-1) && productoSeleccionado == 0){
+
+		if (productoSeleccionado == (listaProductosSeleccionados.size() - 1)
+				&& productoSeleccionado == 0) {
 			btSiguiente.setEnabled(false);
 			btAtras.setEnabled(false);
 		}
-		
-		if(listaProductosSeleccionados.get(productoSeleccionado).getEstado_producto()==Producto.RECOGIDO)
-		{
+
+		if (listaProductosSeleccionados.get(productoSeleccionado)
+				.getEstado_producto() == Producto.RECOGIDO) {
 			btRecogido.setEnabled(false);
 			btRecogido.setText("Ya Recogido");
-		}
-		else{
+		} else {
 			btRecogido.setEnabled(true);
 			btRecogido.setText("Producto Recogido");
 		}
 	}
-	
+
 	private JLabel getLbNombreProducto() {
 		if (lbNombreProducto == null) {
 			lbNombreProducto = new JLabel("Nombre producto:");
 		}
 		return lbNombreProducto;
 	}
+
 	private JLabel getLbNombreProductoInf() {
 		if (lbNombreProductoInf == null) {
 			lbNombreProductoInf = new JLabel("");
 		}
 		return lbNombreProductoInf;
 	}
+
 	private JPanel getPanel_Ampliar_Fragmentar() {
 		if (panel_Ampliar_Fragmentar == null) {
 			panel_Ampliar_Fragmentar = new JPanel();
 			panel_Ampliar_Fragmentar.setLayout(new BorderLayout(0, 0));
-			panel_Ampliar_Fragmentar.add(getPanel_botones_Frag_Ampl(), BorderLayout.SOUTH);
-			panel_Ampliar_Fragmentar.add(getPanel_Mensaje_Frag_Ampl(), BorderLayout.CENTER);
+			panel_Ampliar_Fragmentar.add(getPanel_botones_Frag_Ampl(),
+					BorderLayout.SOUTH);
+			panel_Ampliar_Fragmentar.add(getPanel_Mensaje_Frag_Ampl(),
+					BorderLayout.CENTER);
 		}
 		return panel_Ampliar_Fragmentar;
 	}
+
 	private JPanel getPanel_botones_Frag_Ampl() {
 		if (panel_botones_Frag_Ampl == null) {
 			panel_botones_Frag_Ampl = new JPanel();
@@ -742,96 +808,107 @@ public class Main extends JFrame {
 		}
 		return panel_botones_Frag_Ampl;
 	}
+
 	private JButton getBt_Si() {
 		if (bt_Si == null) {
 			bt_Si = new JButton("Si");
 			bt_Si.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					if(pesoTotalPedSeleccionados > Producto.PESO_GRANDE)
-					{
-						for(int i = 0 ; i<modeloListaProductos.getSize();i++)
-						{
-							if(pesoTotalPedSeleccionados > Producto.PESO_GRANDE)
-							{
-								pesoTotalPedSeleccionados = pesoTotalPedSeleccionados - modeloListaProductos.get(i).getPeso();
+					if (pesoTotalPedSeleccionados > Producto.PESO_GRANDE) {
+						for (int i = 0; i < modeloListaProductos.getSize(); i++) {
+							if (pesoTotalPedSeleccionados > Producto.PESO_GRANDE) {
+								pesoTotalPedSeleccionados = pesoTotalPedSeleccionados
+										- modeloListaProductos.get(i).getPeso();
 								modeloListaProductos.remove(i);
-								
+
 							}
 						}
-						
-						((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Productos");
-						
-						lb_Información.setText("Selecciona los productos que deseas recoger");
-						
-						
+
+						((CardLayout) panel_Pestañas.getLayout()).show(
+								panel_Pestañas, "Productos");
+
+						lb_Información
+								.setText("Selecciona los productos que deseas recoger");
+
 					}
-					if(pesoTotalPedSeleccionados < Producto.PESO_PEQUEÑO)
-					{
-						for(int i = 0 ; i<modeloListaPedidos.getSize();i++)
-						{
+					if (pesoTotalPedSeleccionados < Producto.PESO_PEQUEÑO) {
+						for (int i = 0; i < modeloListaPedidos.getSize(); i++) {
 							Pedido p = modeloListaPedidos.get(i);
-							if(p.getProductos().get(0).getOrder_id() != modeloListaProductos.get(0).getOrder_id())
-								for(int j = 0 ; j<p.getProductos().size();j++)
-								{
-									if(pesoTotalPedSeleccionados < Producto.PESO_PEQUEÑO)
-									{
-										modeloListaProductos.addElement(p.getProductos().get(j));
-										pesoTotalPedSeleccionados = pesoTotalPedSeleccionados + p.getProductos().get(j).getPeso();
+							if (p.getProductos().get(0).getOrder_id() != modeloListaProductos
+									.get(0).getOrder_id())
+								for (int j = 0; j < p.getProductos().size(); j++) {
+									if (pesoTotalPedSeleccionados < Producto.PESO_PEQUEÑO) {
+										modeloListaProductos.addElement(p
+												.getProductos().get(j));
+										pesoTotalPedSeleccionados = pesoTotalPedSeleccionados
+												+ p.getProductos().get(j)
+														.getPeso();
 									}
 								}
 						}
-						
-						((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Productos");
-						
-						lb_Información.setText("Selecciona los productos que deseas recoger");
-						
-						
+
+						((CardLayout) panel_Pestañas.getLayout()).show(
+								panel_Pestañas, "Productos");
+
+						lb_Información
+								.setText("Selecciona los productos que deseas recoger");
+
 					}
 				}
 			});
 		}
 		return bt_Si;
 	}
+
 	private JButton getBt_No() {
 		if (bt_No == null) {
 			bt_No = new JButton("No");
 			bt_No.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					((CardLayout)panel_Pestañas.getLayout()).show(panel_Pestañas, "Productos");
-					lb_Información.setText("Selecciona los productos que deseas recoger");
-					
+					((CardLayout) panel_Pestañas.getLayout()).show(
+							panel_Pestañas, "Productos");
+					lb_Información
+							.setText("Selecciona los productos que deseas recoger");
+
 				}
 			});
 		}
 		return bt_No;
 	}
+
 	private JPanel getPanel_Mensaje_Frag_Ampl() {
 		if (panel_Mensaje_Frag_Ampl == null) {
 			panel_Mensaje_Frag_Ampl = new JPanel();
 			panel_Mensaje_Frag_Ampl.setLayout(new BorderLayout(0, 0));
-			panel_Mensaje_Frag_Ampl.add(getPanelScroll_Mensaje_Ampl_Frag(), BorderLayout.CENTER);
+			panel_Mensaje_Frag_Ampl.add(getPanelScroll_Mensaje_Ampl_Frag(),
+					BorderLayout.CENTER);
 		}
 		return panel_Mensaje_Frag_Ampl;
 	}
+
 	private JScrollPane getPanelScroll_Mensaje_Ampl_Frag() {
 		if (panelScroll_Mensaje_Ampl_Frag == null) {
 			panelScroll_Mensaje_Ampl_Frag = new JScrollPane();
-			panelScroll_Mensaje_Ampl_Frag.setViewportView(getTxArea_Mensaje_Frag_Ampl());
+			panelScroll_Mensaje_Ampl_Frag
+					.setViewportView(getTxArea_Mensaje_Frag_Ampl());
 		}
 		return panelScroll_Mensaje_Ampl_Frag;
 	}
+
 	private JTextArea getTxArea_Mensaje_Frag_Ampl() {
 		if (txArea_Mensaje_Frag_Ampl == null) {
 			txArea_Mensaje_Frag_Ampl = new JTextArea();
-			txArea_Mensaje_Frag_Ampl.setFont(new Font("Monospaced", Font.PLAIN, 11));
+			txArea_Mensaje_Frag_Ampl.setFont(new Font("Monospaced", Font.PLAIN,
+					11));
 			txArea_Mensaje_Frag_Ampl.setEditable(false);
 			txArea_Mensaje_Frag_Ampl.setWrapStyleWord(true);
 			txArea_Mensaje_Frag_Ampl.setLineWrap(true);
 		}
 		return txArea_Mensaje_Frag_Ampl;
 	}
+
 	private JButton getBtnSeleccionarTodo() {
 		if (btnSeleccionarTodo == null) {
 			btnSeleccionarTodo = new JButton("Seleccionar todo");
@@ -839,39 +916,42 @@ public class Main extends JFrame {
 			btnSeleccionarTodo.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					/*int[] a = new int[modeloListaProductos.getSize()];
-					for (int i = 0; i < modeloListaProductos.getSize(); i++) {
-						a[i]=i;
-					}*/
+					/*
+					 * int[] a = new int[modeloListaProductos.getSize()]; for
+					 * (int i = 0; i < modeloListaProductos.getSize(); i++) {
+					 * a[i]=i; }
+					 */
 
 					tabla_productos.selectAll();
-					//bt_Continuar_Productos.setEnabled(true);
+					// bt_Continuar_Productos.setEnabled(true);
 				}
 			});
 		}
 		return btnSeleccionarTodo;
 	}
 
-	
-	
 	private JTable getTabla_Pedidos() {
 		if (tabla_Pedidos == null) {
-			String[] nombreColumnas = {"Orden","Bultos", "Fecha"};
+			String[] nombreColumnas = { "Orden", "Bultos", "Fecha" };
 			modeloTablaPed = new ModeloNoEditable(nombreColumnas, 0);
-			modeloOrdenado = new TableRowSorter<ModeloNoEditable>(modeloTablaPed);
-			
+			modeloOrdenado = new TableRowSorter<ModeloNoEditable>(
+					modeloTablaPed);
+
 			tabla_Pedidos = new JTable(modeloTablaPed);
-			
+
 			tabla_Pedidos.setRowSorter(modeloOrdenado);
 			tabla_Pedidos.getRowSorter().toggleSortOrder(2);
 			tabla_Pedidos.getRowSorter().toggleSortOrder(2);
-			
+
 			tabla_Pedidos.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseReleased(MouseEvent e) {
-					
+					if (tabla_Pedidos.getSelectedRow() != -1) {
 						bt_Continuar.setEnabled(true);
-						btAtras.setEnabled(false);
+					} else {
+						bt_Continuar.setEnabled(false);
+
+					}
 				}
 			});
 			ajustarAnchoColumnas();
@@ -882,89 +962,103 @@ public class Main extends JFrame {
 	}
 
 	private void ajustarAnchoColumnas() {
-		int[] anchos = {50, 50, 50};
-		for(int i = 0; i < tabla_Pedidos.getColumnCount(); i++)
-			tabla_Pedidos.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+		int[] anchos = { 50, 50, 50 };
+		for (int i = 0; i < tabla_Pedidos.getColumnCount(); i++)
+			tabla_Pedidos.getColumnModel().getColumn(i)
+					.setPreferredWidth(anchos[i]);
 	}
-	
-	private void añadirDatosTablaPedidos()
-	{
+
+	private void añadirDatosTablaPedidos() {
 		modeloTablaPed.getDataVector().clear();
 		modeloTablaPed.fireTableDataChanged();
 		Object[] nuevaFila = new Object[3];
-		for(int i=0 ; i < modeloListaPedidos.getSize() ; i++){
+		for (int i = 0; i < modeloListaPedidos.getSize(); i++) {
 			nuevaFila[0] = modeloListaPedidos.get(i).getId();
 			nuevaFila[1] = modeloListaPedidos.get(i).getProductos().size();
-			nuevaFila[2] = modeloListaPedidos.get(i).getProductos().get(0).getFecha();
+			nuevaFila[2] = modeloListaPedidos.get(i).getProductos().get(0)
+					.getFecha();
 			modeloTablaPed.addRow(nuevaFila);
 		}
 	}
-	
-	private void añadirDatosTablaProductos()
-	{
+
+	private void añadirDatosTablaProductos() {
 		modeloTablaProd.getDataVector().clear();
 		modeloTablaProd.fireTableDataChanged();
 		Object[] nuevaFila = new Object[3];
-		for(int i=0 ; i < modeloListaProductos.getSize() ; i++){
+		for (int i = 0; i < modeloListaProductos.getSize(); i++) {
 			nuevaFila[0] = modeloListaProductos.get(i).getOrder_product_name();
-			nuevaFila[1] = modeloListaProductos.get(i).getCantidadTotalEnPedido();
+			nuevaFila[1] = modeloListaProductos.get(i)
+					.getCantidadTotalEnPedido();
 			nuevaFila[2] = modeloListaProductos.get(i).getLocation();
 			modeloTablaProd.addRow(nuevaFila);
 		}
 	}
+
 	private void ajustarAnchoColumnasProd() {
-		int[] anchos = {50, 50, 50};
-		for(int i = 0; i < tabla_productos.getColumnCount(); i++)
-			tabla_productos.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+		int[] anchos = { 50, 50, 50 };
+		for (int i = 0; i < tabla_productos.getColumnCount(); i++)
+			tabla_productos.getColumnModel().getColumn(i)
+					.setPreferredWidth(anchos[i]);
 	}
-	
-	public void cargarDatosProductos(int pedido)
-	{
-		
-		
+
+	public void cargarDatosProductos(int pedido) {
+
 		ArrayList<Producto> a = modeloListaPedidos.get(pedido).getProductos();
-		for(Producto p : a)
+		for (Producto p : a)
 			modeloListaProductos.addElement(p);
 		añadirDatosTablaProductos();
 	}
-	
-	public void borrarDatosProductos()
-	{
+
+	public void borrarDatosProductos() {
 		tabla_productos.removeAll();
 		modeloTablaProd.getDataVector().clear();
 		modeloTablaProd.fireTableDataChanged();
 		modeloOrdenadoProd.getModel().getDataVector().clear();
 		modeloOrdenadoProd.getModel().fireTableDataChanged();
-		
+
 	}
-	
+
 	private JTable getTabla_productos() {
 		if (tabla_productos == null) {
-			
-			String[] nombreColumnas = {"nombre","cantidad", "ubicacion"};
+
+			String[] nombreColumnas = { "nombre", "cantidad", "ubicacion" };
 			modeloTablaProd = new ModeloNoEditable(nombreColumnas, 0);
-			modeloOrdenadoProd = new TableRowSorter<ModeloNoEditable>(modeloTablaProd);
+			modeloOrdenadoProd = new TableRowSorter<ModeloNoEditable>(
+					modeloTablaProd);
 			tabla_productos = new JTable(modeloTablaProd);
-			
-			//tabla_productos.setRowSorter(modeloOrdenadoProd);
-			//tabla_productos.getRowSorter().toggleSortOrder(0);
-			//tabla_productos.getRowSorter().toggleSortOrder(2);
-			
-			
+			tabla_productos.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					if (tabla_Pedidos.getSelectedRow() != -1) {
+						bt_Continuar_Productos.setEnabled(true);
+					} else {
+						bt_Continuar_Productos.setEnabled(false);
+
+					}
+				}
+			});
+
+			// tabla_productos.setRowSorter(modeloOrdenadoProd);
+			// tabla_productos.getRowSorter().toggleSortOrder(0);
+			// tabla_productos.getRowSorter().toggleSortOrder(2);
+
 			ajustarAnchoColumnasProd();
 			tabla_productos.setRowHeight(20);
 			tabla_productos.getTableHeader().setReorderingAllowed(false);
 		}
 		return tabla_productos;
 	}
+
 	private JPanel getPanel_CentralTabla() {
 		if (panel_CentralTabla == null) {
 			panel_CentralTabla = new JPanel();
 			panel_CentralTabla.setLayout(new BorderLayout(0, 0));
-			panel_CentralTabla.add(getPanel_Scroll_Pedidos(), BorderLayout.CENTER);
+			panel_CentralTabla.add(getPanel_Scroll_Pedidos(),
+					BorderLayout.CENTER);
 		}
 		return panel_CentralTabla;
 	}
+
 	private JButton getBt_Incidencias() {
 		if (bt_Incidencias == null) {
 			bt_Incidencias = new JButton("Avisar de incidencia");

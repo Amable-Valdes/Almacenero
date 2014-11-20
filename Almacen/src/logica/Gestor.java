@@ -67,9 +67,9 @@ public class Gestor {
 				String patron = "dd/MM/yyyy";
 			    SimpleDateFormat formato = new SimpleDateFormat(patron);
 			    // formateo
-			    String fecha =formato.format(rs.getDate("fecha"));
+			    String fecha =rs.getString("fecha");
 				
-				int estadoPedido =rs.getInt("estado_pedido");
+//				String estadoPedido =rs.getString("estado_pedido");
 				
 				for (int i = 0; i < cantidad; i++) {
 					// crear el objeto
