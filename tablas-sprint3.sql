@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS `subcategorias` (
 CREATE TABLE IF NOT EXISTS `pedidos` (
   `id_pedido` int(11) unsigned NOT NULL,
   `id_cliente` int(11) unsigned NOT NULL DEFAULT '0',
-  `tipo_pago` varchar(255) NOT NULL DEFAULT ' ',
-  `tipo_envio` varchar(255) NOT NULL DEFAULT ' ',
+  `tipo_pago` varchar(255) NOT NULL DEFAULT 'tarjeta',
+  `tipo_envio` varchar(255) NOT NULL DEFAULT 'normal',
   `estado` varchar(255) NOT NULL DEFAULT ' ',
   `direccion` varchar(255) NOT NULL DEFAULT ' ',
   `precio` int(10) NOT NULL DEFAULT '0'
@@ -31,7 +31,6 @@ CREATE TABLE IF NOT EXISTS `pedidos` (
 
 CREATE TABLE IF NOT EXISTS `tiposenvios` (
   `tipo_envio` varchar(255) NOT NULL DEFAULT ' ',
-  `direccion` varchar(255) NOT NULL,
   `precio` int(11) unsigned NOT NULL DEFAULT '10'
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -93,8 +92,7 @@ CREATE TABLE IF NOT EXISTS `albaranes` (
 
 CREATE TABLE IF NOT EXISTS `tipospagos` (
   `tipo_pago` varchar(255) NOT NULL DEFAULT ' ',
-  `precio` int(11) unsigned NOT NULL DEFAULT '0',
-  `datos` varchar(255) NOT NULL DEFAULT 'no pagado'
+  `precio` int(11) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- asignación de claves
@@ -198,6 +196,16 @@ INSERT INTO `categorias` (`id_categoria`, `categoria_nombre`) VALUES
  INSERT INTO `particulares` (`id_cliente`, `dni`, `nombre`, `apellidos`) VALUES
  (2, '65231253v', 'Federico', 'Snape Suarez'),
  (3, '56842531c', 'Paco', 'Garcia Malavista');
+
+ INSERT INTO `tipospagos` (`tipo_pago`, `precio`) VALUES
+  ('tarjeta', 0),
+  ('paypal', 0),
+  ('transferencia', 2),
+  ('contrareembolso', 3);
+
+ INSERT INTO `tiposenvios` (`tipo_envio`, `precio`) VALUES
+  ('normal', 5),
+  ('urgente', 10);
 
  
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
