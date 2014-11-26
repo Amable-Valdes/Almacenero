@@ -44,20 +44,6 @@ INSERT INTO `category` (`category_id`, `category_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order_product`
---
-
-CREATE TABLE IF NOT EXISTS `order_product` (
-`order_product_id` int(10) unsigned NOT NULL,
-  `order_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `product_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `order_product_quantity` int(10) unsigned NOT NULL DEFAULT '1'
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
-
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `pedidos`
 --
 
@@ -93,9 +79,6 @@ CREATE TABLE IF NOT EXISTS `product` (
   `product_posicion` int(10) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `product`
---
 
 INSERT INTO `product` (`product_id`, `subcategory_id`, `product_name`, `product_description`, `precio`, `product_quantity`, `product_code`, `product_weight`, `product_width`, `product_length`, `product_height`, `product_posicion`) VALUES
 (1, 2, 'Bombilla Philips', 'Bombilla de 70W de rosca simple', '5', -1, '61556168', '10.000', '10.000', '10.000', '10.000', 111),
@@ -104,8 +87,31 @@ INSERT INTO `product` (`product_id`, `subcategory_id`, `product_name`, `product_
 
 -- --------------------------------------------------------
 
-
 -- asignación de claves
+
+--
+-- Indexes for table `category`
+--
+ALTER TABLE `category`
+ ADD PRIMARY KEY (`category_id`), ADD UNIQUE KEY `category_name` (`category_name`);
+
+--
+-- Indexes for table `pedidos`
+--
+ALTER TABLE `pedidos`
+ ADD PRIMARY KEY (`order_product_id`), ADD KEY `order_id` (`order_id`);
+
+--
+-- Indexes for table `product`
+--
+ALTER TABLE `product`
+ ADD PRIMARY KEY (`product_id`), ADD UNIQUE KEY `product_code` (`product_code`), ADD KEY `subcategory_id` (`subcategory_id`);
+
+--
+-- Indexes for table `subcategory`
+--
+ALTER TABLE `subcategory`
+ ADD PRIMARY KEY (`subcategory_id`), ADD UNIQUE KEY `subcategory_name` (`subcategory_name`);
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

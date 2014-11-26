@@ -1,7 +1,9 @@
-
+﻿
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
+--estas son las tablas que he creado deacuerdo con el sprint 3, la base de
+-- datos actual en el server es drnfrani_ips3vX
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
