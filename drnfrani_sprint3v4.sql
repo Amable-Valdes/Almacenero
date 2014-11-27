@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 26-11-2014 a las 14:56:57
+-- Tiempo de generación: 27-11-2014 a las 14:18:04
 -- Versión del servidor: 5.5.40-cll
 -- Versión de PHP: 5.4.23
 
@@ -33,6 +33,17 @@ CREATE TABLE IF NOT EXISTS `albaranes` (
   `transportista` varchar(255) NOT NULL DEFAULT 'habitual',
   `estado` varchar(255) NOT NULL DEFAULT 'generado'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `carrito`
+--
+
+CREATE TABLE IF NOT EXISTS `carrito` (
+  `id_carrito` int(11) NOT NULL,
+  `estado` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -99,16 +110,17 @@ CREATE TABLE IF NOT EXISTS `facturas` (
 
 CREATE TABLE IF NOT EXISTS `minoristas` (
   `id_cliente` int(11) unsigned NOT NULL DEFAULT '0',
-  `empresa` varchar(255) NOT NULL DEFAULT ' '
+  `razon_social` varchar(255) NOT NULL DEFAULT ' ',
+  `cif` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `minoristas`
 --
 
-INSERT INTO `minoristas` (`id_cliente`, `empresa`) VALUES
-(1, 'Diodos SA'),
-(4, 'Bombillas SA');
+INSERT INTO `minoristas` (`id_cliente`, `razon_social`, `cif`) VALUES
+(4, 'Bombillas SA', 61561),
+(5, ' Diodos SA', 651561);
 
 -- --------------------------------------------------------
 
@@ -160,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `productos` (
   `descripcion` text NOT NULL,
   `precio` decimal(10,3) NOT NULL,
   `precio_minorista` decimal(10,3) NOT NULL,
-  `codigo` varchar(255) NOT NULL,
+  `referencia` varchar(255) NOT NULL,
   `ancho` decimal(12,3) unsigned NOT NULL DEFAULT '0.000',
   `largo` decimal(12,3) NOT NULL DEFAULT '0.000',
   `altura` decimal(12,3) NOT NULL DEFAULT '0.000',
@@ -172,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `productos` (
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`id_producto`, `id_subcategoria`, `nombre`, `descripcion`, `precio`, `precio_minorista`, `codigo`, `ancho`, `largo`, `altura`, `peso`, `posicion`) VALUES
+INSERT INTO `productos` (`id_producto`, `id_subcategoria`, `nombre`, `descripcion`, `precio`, `precio_minorista`, `referencia`, `ancho`, `largo`, `altura`, `peso`, `posicion`) VALUES
 (1, 1, 'Diodo estandar', 'estandar', '2.000', '1.650', '3424242', '1.000', '1.000', '1.000', '1.000', 123),
 (2, 1, 'Diodo Zener', 'zener', '3.000', '2.952', '3424243', '1.000', '1.000', '1.000', '1.000', 124),
 (3, 3, 'Bombila Samsung 45W', '45W', '3.000', '2.250', '3424244', '2.000', '1.000', '2.000', '1.000', 324),
@@ -201,6 +213,18 @@ CREATE TABLE IF NOT EXISTS `productosPedidos` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `productos_carrito`
+--
+
+CREATE TABLE IF NOT EXISTS `productos_carrito` (
+  `id_carrito` int(11) NOT NULL,
+  `id_producto` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `subcategorias`
 --
 
@@ -220,6 +244,20 @@ INSERT INTO `subcategorias` (`id_subcategoria`, `id_categoria`, `subcategoria_no
 (3, 1, 'bombilla'),
 (4, 3, 'camaras'),
 (5, 3, 'microfonos');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `terceros`
+--
+
+CREATE TABLE IF NOT EXISTS `terceros` (
+  `id_cliente` int(11) NOT NULL,
+  `id_factura` int(11) NOT NULL,
+  `cif` int(11) NOT NULL,
+  `razon_social` varchar(255) NOT NULL,
+  `direccion` varchar(255) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -272,6 +310,12 @@ ALTER TABLE `albaranes`
  ADD PRIMARY KEY (`id_albaran`,`id_pedido`), ADD KEY `id_pedido` (`id_pedido`);
 
 --
+-- Indices de la tabla `carrito`
+--
+ALTER TABLE `carrito`
+ ADD PRIMARY KEY (`id_carrito`);
+
+--
 -- Indices de la tabla `categorias`
 --
 ALTER TABLE `categorias`
@@ -293,7 +337,7 @@ ALTER TABLE `facturas`
 -- Indices de la tabla `minoristas`
 --
 ALTER TABLE `minoristas`
- ADD PRIMARY KEY (`id_cliente`), ADD UNIQUE KEY `empresa` (`empresa`), ADD KEY `id_cliente` (`id_cliente`);
+ ADD PRIMARY KEY (`id_cliente`), ADD UNIQUE KEY `empresa` (`razon_social`), ADD UNIQUE KEY `cif` (`cif`), ADD KEY `id_cliente` (`id_cliente`);
 
 --
 -- Indices de la tabla `particulares`
@@ -311,7 +355,7 @@ ALTER TABLE `pedidos`
 -- Indices de la tabla `productos`
 --
 ALTER TABLE `productos`
- ADD PRIMARY KEY (`id_producto`), ADD UNIQUE KEY `codigo` (`codigo`), ADD KEY `id_subcategoria` (`id_subcategoria`);
+ ADD PRIMARY KEY (`id_producto`), ADD UNIQUE KEY `codigo` (`referencia`), ADD KEY `id_subcategoria` (`id_subcategoria`);
 
 --
 -- Indices de la tabla `productosPedidos`
@@ -320,10 +364,22 @@ ALTER TABLE `productosPedidos`
  ADD PRIMARY KEY (`id_pedido`,`id_producto`), ADD KEY `id_pedido` (`id_pedido`), ADD KEY `id_producto` (`id_producto`);
 
 --
+-- Indices de la tabla `productos_carrito`
+--
+ALTER TABLE `productos_carrito`
+ ADD PRIMARY KEY (`id_carrito`,`id_producto`);
+
+--
 -- Indices de la tabla `subcategorias`
 --
 ALTER TABLE `subcategorias`
  ADD PRIMARY KEY (`id_subcategoria`), ADD UNIQUE KEY `subcategoria_nombre` (`subcategoria_nombre`), ADD KEY `id_categoria` (`id_categoria`);
+
+--
+-- Indices de la tabla `terceros`
+--
+ALTER TABLE `terceros`
+ ADD PRIMARY KEY (`id_cliente`,`id_factura`);
 
 --
 -- Indices de la tabla `tiposenvios`
@@ -371,7 +427,6 @@ MODIFY `id_producto` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 ALTER TABLE `subcategorias`
 MODIFY `id_subcategoria` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
