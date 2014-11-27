@@ -14,7 +14,7 @@ public class Conexion {
         Class.forName(driverName);
 
         // Create a connection to the database
-        String db = "drnfrani_ips2";
+        String db = "drnfrani_ips3";
         String url = "jdbc:mysql://31.22.4.75/"+db;
         String username = "drnfrani_almacen";
         String password = "carapan1234";

@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `productos` (
   `nombre` varchar(255) NOT NULL,
   `descripcion` text NOT NULL,
   `precio` decimal(10,0) NOT NULL,
-  `codigo` varchar(255) NOT NULL,
+  `referencia` varchar(255) NOT NULL,
   `ancho` decimal(12,3) unsigned NOT NULL DEFAULT '0.000',
   `largo` decimal(12,3) NOT NULL DEFAULT '0.000',
   `altura` decimal(12,3) NOT NULL DEFAULT '0.000',
@@ -122,7 +122,7 @@ ALTER TABLE `tiposenvios`
  ADD PRIMARY KEY (`tipo_envio`);
  
 ALTER TABLE `productos`
- ADD PRIMARY KEY (`id_producto`), ADD UNIQUE KEY `codigo` (`codigo`), ADD KEY `id_subcategoria` (`id_subcategoria`);
+ ADD PRIMARY KEY (`id_producto`), ADD UNIQUE KEY `referencia` (`referencia`), ADD KEY `id_subcategoria` (`id_subcategoria`);
 
 ALTER TABLE `facturas`
  ADD PRIMARY KEY (`id_factura`, `id_cliente`, `id_pedido`), ADD KEY `id_cliente` (`id_cliente`), ADD KEY `id_pedido` (`id_pedido`);
