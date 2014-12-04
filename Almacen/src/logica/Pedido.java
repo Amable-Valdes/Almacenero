@@ -2,11 +2,12 @@ package logica;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Pedido {
 
 	private Integer id;
-	private ArrayList<Producto> productos = new ArrayList<Producto>();
+	private List<Producto> productos = new ArrayList<Producto>();
 
 	public void añadirProducto(Producto producto) {
 		productos.add(producto);
@@ -16,12 +17,30 @@ public class Pedido {
 		productos.remove(producto);
 	}
 
-	public ArrayList<Producto> getProductos() {
+	public List<Producto> getProductos() {
 		return productos;
 	}
+	
+	public List<Bulto> getBultos() {
+		List<Bulto> bultos = new ArrayList<Bulto>();
+		for(Producto p : productos)
+		{
+			List<Producto> bultoEspecifico = new ArrayList<Producto>();
+			bultoEspecifico.add(p);
+			for(Producto producto : productos)
+			{
+				if(p.getOrder_product_code().equals(producto.getOrder_product_code()))
+				{
+					bultoEspecifico.add(producto);
+				}
+			}
+			bultos.add(new Bulto(bultoEspecifico));
+		}
+		return bultos;
+	}
 
-	public void setProductos(ArrayList<Producto> productos) {
-		this.productos = productos;
+	public void setProductos(List<Producto> listaProductos) {
+		this.productos = listaProductos;
 	}
 
 	public Integer getId() {
